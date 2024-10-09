@@ -72,7 +72,7 @@ window.onload = function (){
         });
     });
 
-    const shouldDisplayLegend = m <= 20;
+    const shouldDisplayLegend = m <= 0;
     // Configurazione del grafico
     const ctx = document.getElementById('attackChart').getContext('2d');
     attackChart = new Chart(ctx, {
