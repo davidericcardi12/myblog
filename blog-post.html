@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>Bootstrap 4 Blog Template For Developers</title>
+    
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog Template">
+    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
+    <link rel="shortcut icon" href="favicon.ico"> 
+    
+    <!-- FontAwesome JS-->
+    <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+    
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/monokai-sublime.min.css">
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+    
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto; /* Altezza fissa per i grafici */
+			margin: 10px 0; /* Margine verticale tra i grafici */
+		}
+
+		#prolongationChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto; /* Altezza fissa per i grafici */
+			margin: 10px 0; /* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+    </style>
+
+</head> 
+
+<body>
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 1</h2>
+					<br>
+					<b>1. Theory (intro)</b>
+					<br>
+					- Basic notions in Statistics: Population, Statistical Units, Distribution, Frequency (relative, absolute, percentage);
+					<br>
+					- Notion of arithmetic average. Derivation. Computational problems with floating point rapresentation (errors, catastrophical cancellation) and numerical solution (Knuth) ;
+					<br>
+					<br>
+					<b>2. Application practice</b>
+					<br>
+					We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p. At time n we want to complete distribution how many reached each level. (Draw the distribution histogram vertically at the end of the chart, so that each rectangle representing the attackers' frequency is placed on the corresponding number of penetrations (or "successes") they achieved).
+
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4>1. Theory (intro)</h4>
+						<br>
+						<h6>Population and Statistical Units</h6>
+						<p>The <strong>population</strong> in statistics refers to the entire set of individuals, events, or objects that a study aims to analyze. Each individual member of this population is known as a <strong>statistical unit</strong>. For example, in a survey about the height of people, the population could be all adults in a country, and each person would be a statistical unit.</p>
+
+						<br>
+						<h6>Distribution and Frequency</h6>
+						<p>A <strong>distribution</strong> represents how the values of a variable are spread or distributed over a range of possible values. It helps describe how frequent certain values occur within the dataset.</p>
+						<p><strong>Frequency</strong> refers to the number of times a value appears in a dataset:
+							<ul>
+								<li><strong>Absolute frequency</strong>: The actual count of occurrences.</li>
+								<li><strong>Relative frequency</strong>: The ratio of the frequency of a particular value to the total number of observations (expressed as a fraction or percentage).</li>
+								<li><strong>Percentage frequency</strong>: The relative frequency multiplied by 100 to express it as a percentage.</li>
+							</ul>
+						</p>
+
+						<br>
+						<h6>Arithmetic Average</h6>
+						<p>The <strong>arithmetic average</strong>, commonly known as the mean, is a measure of central tendency. It is computed by summing up all the values in a dataset and dividing by the number of values. Mathematically, it can be expressed as:</p>
+						<p><code>mean = (x₁ + x₂ + ... + xₙ) / n</code>, where <code>n</code> is the total number of observations, and <code>x₁, x₂,...,xₙ</code> are the individual values.</p>
+
+						<br>
+						<h6>Computational Issues: Floating Point Representation</h6>
+						<p>When working with floating-point numbers in computers, precision problems can arise due to how these numbers are stored. One such issue is <strong>catastrophic cancellation</strong>, which occurs when subtracting two nearly equal numbers, resulting in a significant loss of precision. This is especially problematic in large datasets or when working with very small or very large numbers.</p>
+
+						<br>
+						<h6>Numerical Solution (Knuth's Algorithm)</h6>
+						<p>One approach to improving numerical stability in calculating sums and averages is using more precise algorithms, such as those described by Donald Knuth. His method reduces floating-point errors by using compensated summation. The idea is to account for small errors that accumulate during the summation process to avoid losing precision.</p>
+
+						<b>Example in Python:</b>
+						<p>An example implementation of the <strong>Kahan summation algorithm</strong>, a practical solution to minimize floating-point error, could look like this:</p>
+<pre><code>
+def kahan_sum(values):
+	total = 0.0
+	compensation = 0.0  # A running compensation for lost low-order bits.
+	for value in values:
+		y = value - compensation  # Compensate for lost bits.
+		t = total + y  # Perform the addition.
+		compensation = (t - total) - y  # Adjust compensation.
+		total = t
+	return total
+</code></pre>
+
+						<p>This method helps reduce the rounding errors that can accumulate during summation in floating-point arithmetic, making the computation of means more accurate in large datasets.</p>
+						<p>We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p.
+							At time n we want to count how many reached each level. 
+						</p>
+						<br>
+					</div>
+					<div class="description column">
+						<h4>2. Application practice</h4>
+						<br>
+						<p>We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p.
+							At time n we want to count how many reached each level. 
+							</p>
+					</div>
+					<div class="main column">
+						<form action="">
+							<strong>n</strong>
+							<input type="text" class="inp-txt_n" size="5"  value="5">
+							<strong>m</strong>
+							<input type="text" class="inp-txt_m" size="5" value="3">
+							<strong>p</strong>
+							<input type="text" class="inp-txt_p" size="5" value="0.6">
+							<button name="data" type="button" class="btn-make">Make graphics</button>
+						</form>
+						<p><br></p>
+						
+						<div id="chartContainer">
+							<canvas id="attackChart"></canvas>
+							<canvas id="prolongationChart" ></canvas>
+							<dd id="average"></dd>
+						</div>
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_1/attacker.js"></script>
+
+						
+					</div>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="index.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="blog-post1.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
+
+</body>
+</html> 
+
