@@ -111,7 +111,7 @@ window.onload = function (){
     });
  }
 
- let makeHistogram = function createHistogram() {
+ let makeHistogram = function createHistogram(n) {
 
     if(histogramChart)
         histogramChart.destroy();
@@ -124,7 +124,7 @@ window.onload = function (){
 
     // Calcola la percentuale di hacker che hanno raggiunto almeno un certo livello di server
     let labels = [];
-    let penetrationCounts = new Array(attacks[0].length);
+    let penetrationCounts = new Array(attacks[0].length+1);
     for(let i=0; i<penetrationCounts.length; i++){
         penetrationCounts[i] = 0;
         labels.push(i);
@@ -149,6 +149,7 @@ window.onload = function (){
     console.log("media "+average);
 
     // Calcola le percentuali
+    console.log(penetrationCounts.length)
     const percentages = penetrationCounts.map(count => (count / hackers.length) * 100);
     console.log("percentuali "+percentages);
 
@@ -177,6 +178,10 @@ window.onload = function (){
                             return value + '%'; // Aggiungi "unità" a ogni valore
                         }
                     }
+                },
+                x: {
+                    min: 0,
+                    max: parseInt(n)
                 }
             },
             plugins: {
@@ -199,7 +204,7 @@ window.onload = function (){
 
 
     makeGraphicA(n,m);
-    makeHistogram();
+    makeHistogram(n);
 
         let btn_make = document.querySelector(".btn-make");
         btn_make.addEventListener("click", function(event){
@@ -209,7 +214,7 @@ window.onload = function (){
             let p = (document.querySelector(".inp-txt_p")).value; 
             init(n,m,p);
             makeGraphicA(n,m)
-            makeHistogram();
+            makeHistogram(n);
         });
 }
     
