@@ -19,6 +19,9 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
 	
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -36,27 +39,39 @@
 		}
 
 		.btn-make{
-			margin: 15px;
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
 		}
 
 		/* Stile per il canvas dei grafici */
 		#attackChart{
 			 /* Limita la larghezza massima dei grafici */
 			width: 100%; /* Imposta la larghezza al 100% del contenitore */
-			height: auto; /* Altezza fissa per i grafici */
-			margin: 10px 0; /* Margine verticale tra i grafici */
+			height: 400px !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
 		}
 
-		#prolongationChart{
-			 /* Limita la larghezza massima dei grafici */
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
 			width: 100%; /* Imposta la larghezza al 100% del contenitore */
-			height: auto; /* Altezza fissa per i grafici */
-			margin: 10px 0; /* Margine verticale tra i grafici */
+			height: 400px !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
 		}
 		b {
 			font-weight: bold;
 			color: black;
 		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+		
     </style>
 
 </head> 
@@ -110,18 +125,26 @@
 	    <article class="blog-post px-3 py-5 p-md-5">
 		    <div class="container">
 			    <header class="blog-post-header">
-				    <h2 class="title mb-2">Homework 1</h2>
+				    <h2 class="title mb-2">Homework 2</h2>
 					<br>
-					<b>1. Theory (intro)</b>
+					<a href="#Section1">
+						<b>1. Theory</b>
+					</a>
 					<br>
-					- Basic notions in Statistics: Population, Statistical Units, Distribution, Frequency (relative, absolute, percentage);
+					Find the simplest and most elegant way to show the Welford recursion.
+					<br><br>
+					<a href="#Section2">
+						<b>2. Application practice</b>
+					</a>
 					<br>
-					- Notion of arithmetic average. Derivation. Computational problems with floating point rapresentation (errors, catastrophical cancellation) and numerical solution (Knuth) ;
+					Refine you Euler–Maruyama simulator to approximate numerical solutions of stochastic differential equations (SDE), by adding the following variants to the existing framework:
 					<br>
+					A. Jumps -1 +1 with prob. p [random walk]
 					<br>
-					<b>2. Application practice</b>
+					B. Absolute and relative frequency trajectories
 					<br>
-					We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p. At time n we want to complete distribution how many reached each level. (Draw the distribution histogram vertically at the end of the chart, so that each rectangle representing the attackers' frequency is placed on the corresponding number of penetrations (or "successes") they achieved).
+					C. Final distribution and intermediate distributions (at one internal time/step selectable from the gui), with mean and variance (make it all parametric so that one unique interface will handle it all).
+
 
 			    </header>
 			    
@@ -129,57 +152,36 @@
 					<div class="description column">
 						<br>
 						<br>
-						<h4>1. Theory (intro)</h4>
+						<h4 id="Section1">1. Theory</h4>
 						<br>
-						<h6>Population and Statistical Units</h6>
-						<p>The <strong>population</strong> in statistics refers to the entire set of individuals, events, or objects that a study aims to analyze. Each individual member of this population is known as a <strong>statistical unit</strong>. For example, in a survey about the height of people, the population could be all adults in a country, and each person would be a statistical unit.</p>
+						<h6>Welford's Recursion</h6>
 
-						<br>
-						<h6>Distribution and Frequency</h6>
-						<p>A <strong>distribution</strong> represents how the values of a variable are spread or distributed over a range of possible values. It helps describe how frequent certain values occur within the dataset.</p>
-						<p><strong>Frequency</strong> refers to the number of times a value appears in a dataset:
-							<ul>
-								<li><strong>Absolute frequency</strong>: The actual count of occurrences.</li>
-								<li><strong>Relative frequency</strong>: The ratio of the frequency of a particular value to the total number of observations (expressed as a fraction or percentage).</li>
-								<li><strong>Percentage frequency</strong>: The relative frequency multiplied by 100 to express it as a percentage.</li>
-							</ul>
-						</p>
+						<p>The Welford recursion is used to compute the mean and variance in a numerically stable way. The recursive formulas are as follows:</p>
 
-						<br>
-						<h6>Arithmetic Average</h6>
-						<p>The <strong>arithmetic average</strong>, commonly known as the mean, is a measure of central tendency. It is computed by summing up all the values in a dataset and dividing by the number of values. Mathematically, it can be expressed as:</p>
-						<p><code>mean = (x₁ + x₂ + ... + xₙ) / n</code>, where <code>n</code> is the total number of observations, and <code>x₁, x₂,...,xₙ</code> are the individual values.</p>
+						<div class="equation">
+							$$ \mu_n = \mu_{n-1} + \frac{x_n - \mu_{n-1}}{n} $$
+						</div>
 
-						<br>
-						<h6>Computational Issues: Floating Point Representation</h6>
-						<p>When working with floating-point numbers in computers, precision problems can arise due to how these numbers are stored. One such issue is <strong>catastrophic cancellation</strong>, which occurs when subtracting two nearly equal numbers, resulting in a significant loss of precision. This is especially problematic in large datasets or when working with very small or very large numbers.</p>
+						<div class="equation">
+							$$ M_n = M_{n-1} + (x_n - \mu_{n-1})(x_n - \mu_n) $$
+						</div>
 
-						<br>
-						<h6>Numerical Solution (Knuth's Algorithm)</h6>
-						<p>One approach to improving numerical stability in calculating sums and averages is using more precise algorithms, such as those described by Donald Knuth. His method reduces floating-point errors by using compensated summation. The idea is to account for small errors that accumulate during the summation process to avoid losing precision.</p>
+						<p>Where:</p>
+						<ul>
+							<li>\(\mu_n\) is the mean after the \(n\)-th observation.</li>
+							<li>\(M_n\) is an intermediate value used to compute the variance.</li>
+							<li>\(x_n\) is the \(n\)-th data point.</li>
+						</ul>
 
-						<b>Example in Python:</b>
-						<p>An example implementation of the <strong>Kahan summation algorithm</strong>, a practical solution to minimize floating-point error, could look like this:</p>
-<pre><code>
-def kahan_sum(values):
-	total = 0.0
-	compensation = 0.0  # A running compensation for lost low-order bits.
-	for value in values:
-		y = value - compensation  # Compensate for lost bits.
-		t = total + y  # Perform the addition.
-		compensation = (t - total) - y  # Adjust compensation.
-		total = t
-	return total
-</code></pre>
+						<p>The variance is computed by:</p>
+						
+						<div class="equation">
+							$$ \sigma^2_n = \frac{M_n}{n - 1} $$
+						</div>
 
-						<p>This method helps reduce the rounding errors that can accumulate during summation in floating-point arithmetic, making the computation of means more accurate in large datasets.</p>
-						<p>We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p.
-							At time n we want to count how many reached each level. 
-						</p>
-						<br>
-					</div>
+					<br><br>
 					<div class="description column">
-						<h4>2. Application practice</h4>
+						<h4 id="Section2">2. Application practice</h4>
 						<br>
 						<p>We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p.
 							At time n we want to count how many reached each level. 
@@ -187,30 +189,32 @@ def kahan_sum(values):
 					</div>
 					<div class="main column">
 						<form action="">
-							<strong>n</strong>
-							<input type="text" class="inp-txt_n" size="5"  value="5">
-							<strong>m</strong>
-							<input type="text" class="inp-txt_m" size="5" value="3">
+							<strong>server</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="5" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="10" class="inp_txt">
 							<strong>p</strong>
-							<input type="text" class="inp-txt_p" size="5" value="0.6">
+							<input type="number" id="inp-txt_p" size="5" value="0.6" class="inp_txt">
+							<strong>time step</strong>
+							<input type="number" id="inp-txt_timestep" size="5" value="3" class="inp_txt">
 							<button name="data" type="button" class="btn-make">Make chart</button>
 						</form>
-						<p><br></p>
+						
 						
 						<div id="chartContainer">
 							<canvas id="attackChart"></canvas>
-							<canvas id="prolongationChart" ></canvas>
+							<canvas id="distributionChart" ></canvas>
 							<dd id="average"></dd>
 						</div>
 						<!-- CODE OF EXERCISE -->
-						<script src="assets/js/exercise_1/attacker.js"></script>
+						<script src="assets/js/exercise_2/attacker.js"></script>
 
 						
 					</div>
 				    
 			    <nav class="blog-nav nav nav-justified my-5">
-				  <a class="nav-link-prev nav-item nav-link rounded-left" href="index.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework2.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="blog-post.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework3.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
 				</nav>
 				
 				
