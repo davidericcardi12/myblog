@@ -267,7 +267,7 @@ window.onload = function (){
         event.preventDefault();
         let n = (document.getElementById("inp-txt_n")).value; 
         let m = (document.getElementById("inp-txt_m")).value; 
-        let lambda = (document.getElementById("inp-txt_lambda")).value; 
+        let lambda = parseInt((document.getElementById("inp-txt_lambda")).value); 
         if(ceckInput3(n,m,lambda)){
             let p = lambda*1/n;
             init(n,m,p);
