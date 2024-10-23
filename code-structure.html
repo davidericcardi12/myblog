@@ -57,7 +57,7 @@
 
 		#distributionChart{
 			/* Limita la larghezza massima dei grafici */
-			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
 			height: auto !important; /* Altezza fissa per i grafici */
 			/* Margine verticale tra i grafici */
 		}
@@ -106,10 +106,10 @@
 					<li class="nav-item">
 					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
 					</li>
-					<li class="nav-item active">
+					<li class="nav-item">
 					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item active">
 					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
 					</li>
 					<!--
@@ -128,97 +128,156 @@
 	    <article class="blog-post px-3 py-5 p-md-5">
 		    <div class="container">
 			    <header class="blog-post-header">
-				    <h2 class="title mb-2">Homework 2</h2>
-					<br>
-					<a href="#Section1">
-						<b>1. Theory</b>
-					</a>
-					<br>
-					Find the simplest and most elegant way to show the Welford recursion.
-					<br><br>
-					<a href="#Section2">
-						<b>2. Application practice</b>
-					</a>
-					<br>
-					Refine you Euler–Maruyama simulator to approximate numerical solutions of stochastic differential equations (SDE), by adding the following variants to the existing framework:
-					<br>
-					A. Jumps -1 +1 with prob. p [random walk]
-					<br>
-					B. Absolute and relative frequency trajectories
-					<br>
-					C. Final distribution and intermediate distributions (at one internal time/step selectable from the gui), with mean and variance (make it all parametric so that one unique interface will handle it all).
-
-
-			    </header>
+				    <h2 class="title mb-2">Code explanation</h2>
+				</header>
+					
 			    
 			    <div class="blog-post-body">
 					<div class="description column">
 						<br>
-						<br>
-						<h4 id="Section1">1. Theory</h4>
-						<br>
-						<h6>Welford's Recursion</h6>
+						<h6 id="Section1">Code general structure</h6>
+						<p>The main object element is the hacker object. Basically it is responsible for the basic operations one single hacker can do try to attack the n server based on the probability p (the tryToAttack function). After the n attacks the function sets the single path, which will be on the chart, based on the success/failure of the attacks.  Moreover one hacker can tell us his score at any time exploiting the getScoreAtTime function.
+						</p>
+<pre><code>
+	function getHacker(){
+		let hacker = new Object();
+	
+		hacker.success = [];
+		hacker.path = [0];
+	
+		hacker.tryToAttack = function (p, n){
+			for(let i=0; i&lt;n; i++){
+				// Generate a random number between 0 and 1
+				const randomValue = Math.random();
+				
+				// if random number < p, return 1, else 0
+				let wl = randomValue < p ? 1 : 0;
+				this.success.push(wl);
+				//console.log(this.success);
+			}
+			// imposta il cammino del grafico. Se decrement = 1 ogni insuccesso decrementa il punteggio.
+			let setPath = function(hacker, decrement){ 
+				for(let i=0,j=1; i&lt;hacker.success.length; i++,j++){
+					if(decrement==1 && hacker.success[i] == 0)
+						hacker.path.push(hacker.path[j-1] - 1);
+					else if(hacker.success[i] == 1)
+						hacker.path.push(hacker.path[j-1] + 1);
+					else // decrement==0 && success==0
+						hacker.path.push(hacker.path[j-1]); //linea piatta
+				}
+			}
+			setPath(this, 0);
+		}
+	
+		hacker.getScoreAtTime = function(time){
+			return this.path[time];
+		}
+	
+		return hacker;
+	}
+</code></pre>
 
-						<p>The Welford recursion is used to compute the mean and variance in a numerically stable way. The recursive formulas are as follows:</p>
+				<br>
+				<p><b>However, the main code never communicates directly with a single hacker</b> but it will be the hacker(s) object to do it. Indeed the main code communicates with this object that menages all the functionality that concern the set of hackers. So, this object contains the list of hackers, the attack function (doAttack) that performs all the attacks for all the hackers and then sets the whole path that will be on the chart. If you want, the hacker(s) object can also, at any time, return mean, variance absolute and relative distribution.
+				</p>
+<pre><code>
+	function getHackers(m){
 
-						<div class="equation">
-							$$ \mu_n = \mu_{n-1} + \frac{x_n - \mu_{n-1}}{n} $$
-						</div>
-
-						<div class="equation">
-							$$ M_n = M_{n-1} + (x_n - \mu_{n-1})(x_n - \mu_n) $$
-						</div>
-
-						<p>Where:</p>
-						<ul>
-							<li>\(\mu_n\) is the mean after the \(n\)-th observation.</li>
-							<li>\(M_n\) is an intermediate value used to compute the variance.</li>
-							<li>\(x_n\) is the \(n\)-th data point.</li>
-						</ul>
-
-						<p>The variance is computed by:</p>
-						
-						<div class="equation">
-							$$ \sigma^2_n = \frac{M_n}{n - 1} $$
-						</div>
-
-					<br><br>
-					<div class="description column">
-						<h4 id="Section2">2. Application practice</h4>
-						<br>
-						<p>We have n servers with m attackers. The hacker has probability p to penetrate each server. Make a graphical representation (line flat if hacker doesn’t penetrate and a jump to 1 if he penetrates), try different n,m,p.
-							At time n we want to count how many reached each level. 
-							</p>
-					</div>
-					<div class="main column">
-						<form action="">
-							<strong>server</strong>
-							<input type="number" id="inp-txt_n" size="5"  value="5" class="inp_txt">
-							<strong>hacker</strong>
-							<input type="number" id="inp-txt_m" size="5" value="10" class="inp_txt">
-							<strong>p</strong>
-							<input type="number" id="inp-txt_p" size="5" value="0.6" class="inp_txt">
-							<strong>time step</strong>
-							<input type="number" id="inp-txt_timestep" size="5" value="3" class="inp_txt">
-							<button name="data" type="button" class="btn-make">Make chart</button>
-						</form>
-						
-						
-						<div id="chartContainer">
-							<canvas id="attackChart"></canvas>
-							<canvas id="distributionChart" ></canvas>
-							<dd id="average"></dd>
-						</div>
-						<!-- CODE OF EXERCISE -->
-						<script src="assets/js/exercise_2/attacker.js"></script>
-
-						
-					</div>
-				    
-			    <nav class="blog-nav nav nav-justified my-5">
-				  <a class="nav-link-prev nav-item nav-link rounded-left" href="blog-post.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework3.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
-				</nav>
+		let hackers = new Object();
+	
+		hackers.hacker_list = []
+	
+		//push hackers
+		for(let i=0; i&lt;m; i++){
+			hackers.hacker_list.push(getHacker());
+			console.log("push " + hackers.hacker_list[i]);
+		}
+	
+		// esegui attacchi e imposta i cammini di ognuno nel grafico
+		hackers.paths = []
+		hackers.doAttacks = function(p, n){
+			for(let i=0; i&lt;this.hacker_list.length; i++){
+				this.hacker_list[i].tryToAttack(p, n);
+				console.log(this.hacker_list[i].success);
+			}
+	
+			let setPaths = function(hackers){
+				for(let i=0; i&lt;hackers.hacker_list.length; i++){
+					hackers.paths.push(hackers.hacker_list[i].path);
+				}
+			}
+			setPaths(this);
+			console.log("paths");
+			console.log(this.paths);
+		}
+	
+		// media scores degli hacker al tempo time
+		hackers.getMeanAtTime = function(time){
+			let score_at_time; 
+			let mean = 0;
+			if(time==0)
+				return 0;
+			for(let i=0; i&lt;this.hacker_list.length; i++){
+				score_at_time = this.hacker_list[i].getScoreAtTime(time);
+				console.log("score at time " + time + ": " + score_at_time + " per hacker " + i);
+				mean = mean + score_at_time/this.hacker_list.length;
+			}
+			console.log("mean at time: " + time + ": " + mean);
+			return mean;
+		}
+		
+		// varianza scores hacker al tempo time
+		hackers.getVarianceAtTime = function(time){
+			let score_at_time; 
+			let mean = this.getMeanAtTime(time);
+			let variance = 0;
+			if(time==0)
+				return 0;
+			for(let i=0; i&lt;this.hacker_list.length; i++){
+				
+				score_at_time = this.hacker_list[i].getScoreAtTime(time);
+				variance += ((score_at_time - mean)**2) / time;
+			}
+			return variance;
+		}
+	
+		// Array bidimensionale per rappresentare gli attacchi di tutti gli hacker
+		hackers.getListOfAttacks = function(){
+			let attacks = [];
+			this.hacker_list.forEach(function(hacker){
+				attacks.push(hacker.success);
+			});
+			return attacks;
+		}
+	
+		// per ogni livello raggiungibile quanti hacker hanno raggiunto quel livello
+		hackers.getAbsoluteDistributionAtTime = function(n, time){
+			let distribution = Array(2*n+1).fill(0); // livello i corrisponde a [n - i]
+			for(let i=0; i&lt;this.hacker_list.length; i++){
+				let hackerScoreAtTime = this.hacker_list[i].getScoreAtTime(time);
+				console.log("hacker "+ i + " score: " + hackerScoreAtTime);
+				distribution[n - hackerScoreAtTime] += 1;
+			}
+			return distribution;
+		}
+	
+		hackers.getRelativeDistributionAtTime = function(n, time){
+			let absolute_distribution = this.getAbsoluteDistributionAtTime(n, time) // livello -i corrisponde a [i]; livello +i corrisponde a [n+i]
+			let relative_distribution = []
+			for(let i=0; i&lt;absolute_distribution.length; i++){
+				relative_distribution.push(absolute_distribution[i] / this.hacker_list.length);
+			}
+			return relative_distribution;
+		}
+	
+		return hackers;
+	}
+</code></pre>
+				<br>
+				<p>So, we never have the getHacker call function in our main code but just the getHackers(m). It makes more easy manage the complexity of code and also any future changes on the hacker general structure.</p>
+				<br>
+				<p>Finally, if you want see all of this and also the codes relative to the charts structure, you can use the ispect command in the pages dedicated to the homeworks and looking for assets/js/exercise_/attacker.js</p>
+			
 				
 				
 				

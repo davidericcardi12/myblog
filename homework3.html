@@ -19,14 +19,310 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
 
-    <script src="assets/js/exercise_2/attacker.js"></script>
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 2</h2>
+					<br>
+					<a href="#Section1">
+						<b>Theory/Research</b>
+					</a>
+					<br>
+					<dl>
+						<li>Illustrate formally, in the simplest possible way, why the Median is the minimum c f the sum of |x(i) - c| (sum of absolute deviations).
+						</li> 
+						<li>Find all possible different conceptual different ways to define a "location" statistics (sometime also called "center" or "central tendency") or synthesis of a distributions. Showing how the generalization of these ideas can potentially lead to infinite other definitions.</li> 
+					</dl>
+				
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+					Refine your SDE simulator to simulate a continuous time process where we can have an attack (indicated with a jump of +1) at any time with a constant rate of attack. To create the approximation of time continuity subdivide your reference temporal window into numerous intervals of vanishing size dt = 1/n and to each infinitesimal interval assign a probability of a +1 "jump" (attack success) equal to Lambda * dt, where Lambda is a simulation parameter, having the meaning of expected total number of attacks in the reference period.
+
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+						<h5>Why the Median Minimizes the Sum of Absolute Deviations</h5>
+						<br>
+						<p>The goal is to find the value of <b>c</b> that minimizes the sum of absolute deviations, defined as:</p>
+
+						<p class="formula">
+							S(c) = Σ |x<sub>i</sub> - c|
+						</p>
+
+						<p>where <b>x<sub>i</sub></b> are the data points. The value that minimizes this sum is the <b>median</b>. Here's the proof:</p>
+
+						<p><b >1. Define the sum of absolute deviations:</b></p>
+						<p class="formula">
+							S(c) = |x<sub>1</sub> - c| + |x<sub>2</sub> - c| + ... + |x<sub>n</sub> - c|
+						</p>
+
+						<p>This is the sum of the absolute differences between each data point <b>x<sub>i</sub></b> and the point <b>c</b> we're looking to minimize.</p>
+
+						<p><b>2. Split the data:</b></p>
+						<p>Arrange the data in non-decreasing order: <b>x<sub>1</sub> ≤ x<sub>2</sub> ≤ ... ≤ x<sub>n</sub></b>. To minimize the sum, we need to consider how the sum behaves to the left and right of <b>c</b>. If we move <b>c</b> slightly left or right, it affects the deviations differently depending on whether <b>c</b> is less than or greater than the data points.</p>
+
+						<p><b>3. Median minimizes the sum:</b></p>
+						<p>Suppose <b>c</b> is the <b>median</b> of the dataset, which splits the data into two halves. When <b>c</b> is the median, the number of data points smaller than or equal to <b>c</b> is the same as the number of data points larger than or equal to <b>c</b>. Moving <b>c</b> in either direction will increase the absolute deviations for one half more than it decreases for the other half, resulting in a larger sum.</p>
+
+						<p>Therefore, the sum of absolute deviations is minimized when <b>c</b> is the median.</p>
+
+						<p><b>Conclusion</b></p>
+						<p>Formally, the median minimizes the function:</p>
+						<p class="formula">
+							S(c) = Σ |x<sub>i</sub> - c|
+						</p>
+
+						<p>This property makes the median the optimal choice when dealing with absolute deviations.</p>
+
+						<br><br>
+
+						<h5>Defining Location Statistics</h5>
+
+						<p>Location statistics, often referred to as central tendency or measures of center, provide a way to summarize a distribution. Here, we explore various conceptual definitions of location statistics and their generalizations, leading to a potentially infinite set of definitions.</p>
+
+						<b><p>1. Arithmetic Mean</p></b>
+						<p>The arithmetic mean is the sum of all observations divided by the number of observations:</p>
+						<p class="formula">
+							μ = (Σ x<sub>i</sub>) / n
+						</p>
+						<p>It is the most common measure of central tendency, representing the balance point of a dataset.</p>
+
+						<b><p>Generalization:</p></b>
+						<p>By altering the weights of observations or applying different functions, we can derive various means, such as the weighted mean:</p>
+						<p class="formula">
+							μ<sub>w</sub> = (Σ w<sub>i</sub> x<sub>i</sub>) / (Σ w<sub>i</sub>)
+						</p>
+
+						<b><p>2. Median</p></b>
+						<p>The median is the middle value when data is sorted. It divides the dataset into two equal halves:</p>
+						<p>For a dataset {x<sub>1</sub>, x<sub>2</sub>, ..., x<sub>n</sub>}, if n is odd, the median is:</p>
+						<p class="formula">
+							Median = x<sub>((n + 1) / 2)</sub>
+						</p>
+
+						<b><p>Generalization:</p></b>
+						<p>We can extend the concept of the median to any quantile, leading to quantile-based location statistics:</p>
+						<p class="formula">
+							Q<sub>k</sub> = x<sub>((nk) / 100)</sub> for k = 0, 1, ..., 100
+						</p>
+
+						<b><p>3. Mode</p></b>
+						<p>The mode is the most frequently occurring value in a dataset. It can be used for categorical data:</p>
+						<p>For a dataset, if x<sub>i</sub> occurs most frequently, then:</p>
+						<p class="formula">
+							Mode = x<sub>max</sub> where f(x<sub>i</sub>) = max(f(x<sub>j</sub>))
+						</p>
+
+						<b><p>Generalization:</p></b>
+						<p>We can define multiple modes (bimodal, trimodal, etc.) or explore the frequency distribution to derive other measures of central tendency based on frequency thresholds.</p>
+
+						<b><p>4. Geometric Mean</p></b>
+						<p>The geometric mean is the nth root of the product of n values, suitable for multiplicative processes:</p>
+						<p class="formula">
+							GM = (x<sub>1</sub> * x<sub>2</sub> * ... * x<sub>n</sub>)<sup>1/n</sup>
+						</p>
+
+						<b><p>Generalization:</p></b>
+						<p>By using different bases or modifications to the product, we can create other means, such as the generalized geometric mean:</p>
+						<p class="formula">
+							GM<sub>g</sub> = (Σ g<sub>i</sub> * x<sub>i</sub>)<sup>1/S</sup>
+						</p>
+
+						<b><p>5. Other Location Statistics</p></b>
+						<p>Other measures include:</p>
+						<ul>
+							<li><b>Trimean:</b> A combination of mean and median.</li>
+							<li><b>Winsorized Mean:</b> Mean after replacing extreme values.</li>
+							<li><b>Midrange:</b> Average of the maximum and minimum values.</li>
+						</ul>
+
+						<b><p>Generalization:</p></b>
+						<p>Each of these can be modified to create new statistics. For instance, adjusting the weights or applying different transformations to data points can lead to an infinite variety of measures.</p>
+
+						<b><p>Conclusion</p></b>
+						<p>Location statistics provide essential insights into data distributions. By exploring various definitions and generalizations, we can discover countless ways to summarize and understand data effectively.</p>
+
+					<br><br>
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						<br>
+						
+					</div>
+					<div class="main column">
+						<form action="">
+							<strong>time</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="100" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="50" class="inp_txt">
+							<strong>lambda(attack rate)</strong>
+							<input type="number" id="inp-txt_lambda" size="5" value="50" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="attackChart"></canvas>
+							<canvas id="distributionChart" ></canvas>
+							<canvas id="distributionChartB" ></canvas>
+							<dd id="average"></dd>
+						</div>
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_3/attacker.js"></script>
+
+						
+					</div>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="blog-post.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework3.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
+
 </body>
 </html> 
 

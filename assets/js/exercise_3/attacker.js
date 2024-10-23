@@ -4,42 +4,38 @@ window.onload = function (){
 
     let n = (document.getElementById("inp-txt_n")).value; 
     let m = (document.getElementById("inp-txt_m")).value; 
-    let p = (document.getElementById("inp-txt_p")).value; 
-    let time_step = parseInt((document.getElementById("inp-txt_timestep")).value); 
-    console.log("TIMESTOP " + time_step);
+    //let p = (document.getElementById("inp-txt_p")).value;
+    let lambda = (document.getElementById("inp-txt_lambda")).value;
 
     /** FOR TESTING **/
-    /*let n = 10;
+    /*let n = 5;
     let m = 3;
-    let p = 0.8;
-    let time_step = 3; */
+    //let p = 0.8;
+    let lambda = 2;*/
+
+    let p = lambda*1/n;
 
     let hackers;
     let relative_distribution_at_time;
-    
 
-    let init = function(n,m,p,time_step){
+    let init = function(n,m,p){
         hackers = getHackers(m);
         /*** TRY TO ATTACK  ***/
         console.log(hackers.hacker_list);
         hackers.doAttacks(p, n);
         /*** END ***/
-        relative_distribution_at_time = hackers.getRelativeDistributionAtTime(n, time_step);
-        console.log("media tempo 3: " +  hackers.getMeanAtTime(time_step));
-        console.log("variance tempo 3: " + hackers.getVarianceAtTime(3));
-        console.log("absolute distribution tempo 3: " + hackers.getAbsoluteDistributionAtTime(n, 3));
-        console.log("relative distribution tempo 3: " + relative_distribution_at_time);
+        relative_distribution_at_time = hackers.getRelativeDistributionAtTime(n);
+    
 
 
     }
-    init(n,m,p,time_step);
+    init(n,m,p);
 
     let attackChart;
     let distributionChart;
     let distributionChartB;
 
-
-    let makeGraphicA = function (n,m,time_step) {
+    let makeGraphicA = function (n,m) {
 
         if(attackChart)
             attackChart.destroy();
@@ -69,17 +65,6 @@ window.onload = function (){
             });
         });
 
-        //aggiunta dei dati del grafico annidato
-        let distr_y = []
-        relative_distribution_at_time.forEach( (val, index) =>{
-            if(index == 0)
-                index += 0.1;
-            else if (index == relative_distribution_at_time.length-1)
-                index -= 0.1;
-            let elem = {x: time_step, y: index - n, length: val};
-            distr_y.push(elem)
-        });
-        console.log(distr_y);
         /*datasets.push({
             type: "bar",
             data: distr_y.map(item => ({
@@ -97,7 +82,6 @@ window.onload = function (){
         });*/
 
 
-        const shouldDisplayLegend = m <= 0;
         // Configurazione del grafico
         let ctx = document.getElementById('attackChart');
         //ctx.setAttribute("style","height:400px");
@@ -124,14 +108,6 @@ window.onload = function (){
                                 console.log("kllll " +hackers.getMeanAtTime(n));
                                 return [
                                     {
-                                        text: 'Relative Distribution at time ' + time_step + "; Mean: " + roundToTwoDecimalPlaces(hackers.getMeanAtTime(time_step)) + "; Variance: " + roundToTwoDecimalPlaces(hackers.getVarianceAtTime(time_step)),
-                                        fillStyle: 'rgba(138, 43, 226, 1)',  // Colore della legenda
-                                        strokeStyle: 'rgba(138, 43, 226, 1)',
-                                        lineWidth: 3,
-                                        hidden: false,  // Non nascondere questa voce
-                                        datasetIndex: 1  // Associa al secondo dataset (esempio)
-                                    },
-                                    {
                                         text: 'Relative Distribution at time ' + n + "; Mean: " + roundToTwoDecimalPlaces(hackers.getMeanAtTime(n)) + "; Variance: " + roundToTwoDecimalPlaces(hackers.getVarianceAtTime(n)),
                                         fillStyle: 'rgba(255, 0, 0)',  // Colore della legenda
                                         strokeStyle: 'rgba(255, 0, 0)',
@@ -142,7 +118,7 @@ window.onload = function (){
                                 ];
                             }
                         }
-                    }
+                    },
                 },
                 scales: {
                     x: {
@@ -150,7 +126,7 @@ window.onload = function (){
                         type: "linear",
                         title: {
                             display: true,
-                            text: 'Server'
+                            text: 'Time'
                         },
                         ticks: {
                             callback: function(value) {
@@ -160,8 +136,8 @@ window.onload = function (){
                         }
                     },
                     y: {
-                        
-                        min: - parseInt(n),
+                        type: 'linear',
+                        min: 0,
                         max: + parseInt(n),
                         title: {
                             display: true,
@@ -171,44 +147,30 @@ window.onload = function (){
                         ticks: {
                             stepSize: 1  // Incremento di 1 unità
                         }
+                    },
+                    y2: { // Configurazione per l'asse Y secondario
+                        type: 'linear', // Assicurati che sia di tipo lineare,
+                        min: 0,
+                        max: + parseInt(n),
+                        position: 'right', // Posizione dell'asse Y secondario
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false // Nascondi la griglia per l'asse secondario
+                        },
+                        // Mappa l'asse secondario all'asse primario
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return value; // Restituisce lo stesso valore dell'asse principale
+                            }
+                        }
                     }
-                }
+                },
+                
             }
         });
-        // Aggiungi la linea orizzontale in un certo punto 'time_step'
-        let half_chart_remain = n-time_step;
-        if(half_chart_remain==0){
-            half_chart_remain = 1;
-        }
 
-        relative_distribution_at_time.forEach((length, index) => {
-            let i_y = n-index;
-            const yPosition = i_y; // Y per l'indice corrente
-            const startX = time_step;
-            const endX = time_step + (length)*half_chart_remain/2 // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
-            // Aggiungi la linea orizzontale
-            attackChart.data.datasets.push({
-                label: `Relative distribution`,
-                data: [
-                    { x: startX, y: yPosition },
-                    { x: endX, y: yPosition }
-                ],
-                borderColor: 'rgba(138, 43, 226, 1)', // Colore della linea orizzontale
-                borderWidth: 5,
-                fill: false, // Non riempire l'area sotto la linea
-                tension: 0, // Rimuovi le curve
-                pointRadius: 0, // Nascondi i punti all'estremità della linea
-                showLegend: true, // Mostra solo la leggenda per questa linea
-                order: 1
-            });
-        });
-
-        // Aggiorna il grafico per riflettere le nuove linee orizzontali
-        attackChart.update();
-
-        
         // Aggiungi la linea orizzontale a tempo n
-        half_chart_remain = (n*0.2); //la rimanente è il 20 percento del valore di n aggiunto automaticamente da chart
+        let half_chart_remain = (n*0.2); //la rimanente è il 20 percento del valore di n aggiunto automaticamente da chart
         // Ricalcola la distribuzione relativa a tempo n
         relative_distribution_at_time = hackers.getRelativeDistributionAtTime(n, parseInt(n))
  
@@ -216,17 +178,17 @@ window.onload = function (){
             let i_y = n-index;
             const yPosition = i_y; // Y per l'indice corrente
             const startX = parseInt(n);
-            const endX = parseInt(n) + (length)*half_chart_remain; // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
+            const endX = parseInt(n) + (length)*half_chart_remain*5; // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
 
             // Aggiungi la linea orizzontale
             attackChart.data.datasets.push({
                 label: `Relative distribution`,
                 data: [
-                    { x: startX, y: yPosition },
-                    { x: endX, y: yPosition }
+                    { x: startX+0.3, y: yPosition  },
+                    { x: endX+0.3, y: yPosition }
                 ],
                 borderColor: 'rgb(255, 0, 0)', // Colore della linea orizzontale
-                borderWidth: 5,
+                borderWidth: 10,
                 fill: false, // Non riempire l'area sotto la linea
                 tension: 0, // Rimuovi le curve
                 pointRadius: 0, // Nascondi i punti all'estremità della linea
@@ -240,149 +202,77 @@ window.onload = function (){
 
  }  
 
-    let makeHistogram = function (n, time_step) {
-        console.log("MAKEHISTOGRAM")
+ let makeHistogram = function (n) {
+    console.log("MAKEHISTOGRAM")
 
-        if(distributionChart)
-            distributionChart.destroy();
-            
-        const relativeDistribution_ts = hackers.getRelativeDistributionAtTime(n, time_step);
-        const relativeDistribution_n = hackers.getRelativeDistributionAtTime(n, n);
-
-        // Configurazione del grafico
-        const ctx = document.getElementById('distributionChart').getContext('2d');
-
-        //limita il set in modo che sull'asse x nel grafico solo i valori in un range (min_x, max_x) tale che nessun valore prima di min_x  ha un valore di distribuzione maggiore di 0 e lo stesso per max_x 
-       
+    if(distributionChart)
+        distributionChart.destroy();
         
-        distributionChart = new Chart(ctx, {
-            type: 'bar', // Usa 'bar' per un grafico a barre
-            data: {
-                labels: [...Array(n * 2 + 1).keys()].map(i => i - n), // Genera etichette da -n a +n
-                datasets: [
-                   {
-                    label: 'Relative Distribution at time ' + time_step,
-                    data: relativeDistribution_ts.reverse(),
-                    backgroundColor: 'rgba(138, 43, 226)', // Colore delle barre
-                    borderColor: 'rgba(138, 43, 226)',
-                    borderWidth: 1,
-                    minBarLength: 2, // Cambia questo valore in base alle esigenze
-                    barPercentage: 0.8, // Diminuisci per evitare sovrapposizioni
-                    categoryPercentage: 0.8, // Diminuisci per avere più spazio tra le categorie
-                },
+    const absoluteDistribution_n = hackers.getAbsoluteDistributionAtTime(n, n);
+
+
+    // Configurazione del grafico
+    const ctx = document.getElementById('distributionChart').getContext('2d');
+
+    //limita il set in modo che sull'asse x nel grafico solo i valori in un range (min_x, max_x) tale che nessun valore prima di min_x  ha un valore di distribuzione maggiore di 0 e lo stesso per max_x 
+   
+    
+    distributionChart = new Chart(ctx, {
+        type: 'bar', // Usa 'bar' per un grafico a barre
+        data: {
+            labels: [...Array(n * 2 + 1).keys()].map(i => i - n), // Genera etichette da -n a +n
+            datasets: [
                 {
-                    label: 'Relative Distribution at time ' + n,
-                    data: relativeDistribution_n.reverse(),
+                    label: '# Hacker ',
+                    data: absoluteDistribution_n.reverse(),
                     backgroundColor: 'rgba(255, 0, 0)', // Colore delle barre
                     borderColor: 'rgba(255, 0, 0)',
                     borderWidth: 1,
                     minBarLength: 2, // Cambia questo valore in base alle esigenze
                     barPercentage: 0.8, // Diminuisci per evitare sovrapposizioni
-                    categoryPercentage: 0.8, // Diminuisci per avere più spazio tra le categorie
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Level' 
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            //text: 'Valori' // Sostituisci con il tuo titolo
-                        },
-                        beginAtZero: true // Inizia da zero sull'asse Y
+                    categoryPercentage: 0.8, // Diminuisci per avere più spazio tra le categorie     
+               }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    min: 0,
+                    max: n,
+                    title: {
+                        display: true,
+                        text: 'Time' 
                     }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of hacker'
+                    },
+                    beginAtZero: true // Inizia da zero sull'asse Y
                 }
             }
-        });
-                
-    }
-
-    let makeHistogramB = function (n, time_step) {
-        console.log("MAKEHISTOGRAM")
-
-        if(distributionChartB)
-            distributionChartB.destroy();
+        }
+    });
             
-        const absoluteDistribution_n = hackers.getAbsoluteDistributionAtTime(n, n);
-        const absoluteDistribution_ts = hackers.getAbsoluteDistributionAtTime(n, time_step);
-
-        // Configurazione del grafico
-        const ctx = document.getElementById('distributionChartB').getContext('2d');
-
-        distributionChartB = new Chart(ctx, {
-            type: 'bar', // Usa 'bar' per un grafico a barre
-            data: {
-                labels: [...Array(n * 2 + 1).keys()].map(i => i - n), // Genera etichette da -n a +n
-                datasets: [
-                    {
-                        label: 'Absolute Distribution at time ' + time_step,
-                        data: absoluteDistribution_ts.reverse(),
-                        backgroundColor: 'rgba(138, 43, 226, 0.5)', // Colore delle barre
-                        borderColor: 'rgba(138, 43, 226, 0.5)',
-                        borderWidth: 1,
-                        minBarLength: 2, // Cambia questo valore in base alle esigenze
-                        barPercentage: 1, // Diminuisci per evitare sovrapposizioni
-                        categoryPercentage: 1, // Diminuisci per avere più spazio tra le categorie
-                    },
-                    {
-                        label: 'Absolute Distribution at time ' + n,
-                        data: absoluteDistribution_n.reverse(),
-                        backgroundColor: 'rgba(255, 0, 0, 0.5)', // Colore delle barre
-                        borderColor: 'rgba(255, 0, 0, 0.5)',
-                        borderWidth: 1,
-                        minBarLength: 2, // Cambia questo valore in base alle esigenze
-                        barPercentage: 0.8, // Diminuisci per evitare sovrapposizioni
-                        categoryPercentage: 0.8, // Diminuisci per avere più spazio tra le categorie     
-                   }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Level' 
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            //text: 'Valori' // Sostituisci con il tuo titolo
-                        },
-                        beginAtZero: true // Inizia da zero sull'asse Y
-                    }
-                }
-            }
-        });
-                
-    }
+}
 
 
-
-    makeGraphicA(n,m,time_step);
-    makeHistogram(n, time_step);
-    makeHistogramB(n, time_step);
+    makeGraphicA(n,m);
+    makeHistogram(n);
 
     let btn_make = document.querySelector(".btn-make");
     btn_make.addEventListener("click", function(event){
         event.preventDefault();
         let n = (document.getElementById("inp-txt_n")).value; 
         let m = (document.getElementById("inp-txt_m")).value; 
-        let p = (document.getElementById("inp-txt_p")).value; 
-        let time_step = parseInt((document.getElementById("inp-txt_timestep")).value); 
-        if(ceckInput(n,m,p,time_step)){
-            init(n,m,p,time_step);
-            makeGraphicA(n,m,time_step);
-            makeHistogram(n, time_step);
-            makeHistogramB(n, time_step);
+        let lambda = (document.getElementById("inp-txt_lambda")).value; 
+        if(ceckInput3(n,m,lambda)){
+            let p = lambda*1/n;
+            init(n,m,p);
+            makeGraphicA(n,m);
+            makeHistogram(n);
         }
     });
 }
@@ -486,7 +376,7 @@ function getHacker(){
     let hacker = new Object();
 
     hacker.success = [];
-    hacker.path = [0]
+    hacker.path = [0];
 
     hacker.tryToAttack = function (p, n){
         for(let i=0; i<n; i++){
@@ -498,16 +388,18 @@ function getHacker(){
             this.success.push(wl);
             //console.log(this.success);
         }
-        // imposta il cammino del grafico 
-        let setPath = function(hacker){
+        // imposta il cammino del grafico. Se decrement = 1 ogni insuccesso decrementa il punteggio.
+        let setPath = function(hacker, decrement){ 
             for(let i=0,j=1; i<hacker.success.length; i++,j++){
-                if(hacker.success[i] == 0)
+                if(decrement==1 && hacker.success[i] == 0)
                     hacker.path.push(hacker.path[j-1] - 1);
-                else 
+                else if(hacker.success[i] == 1)
                     hacker.path.push(hacker.path[j-1] + 1);
+                else // decrement==0 && success==0
+                    hacker.path.push(hacker.path[j-1]); //linea piatta
             }
         }
-        setPath(this);
+        setPath(this, 0);
     }
 
     hacker.getScoreAtTime = function(time){
@@ -604,6 +496,23 @@ function ceckInput(n, m, p, time_step){
     }
     if(time_step===undefined || time_step<0 || time_step>n){
         alert("time step must be between 0 and " + n);
+        return false;
+    }
+    return true;
+}
+
+function ceckInput3(n, m, lambda){
+    if(n===undefined || n <= 0){
+        alert("time must be > 0");
+        return false;
+    }
+    if(m===undefined || m <= 0){
+        alert("hacker must be > 0");
+        return false;
+    }
+
+    if(lambda===undefined || lambda<0 || lambda>n){
+        alert("lambda must be between 0 and " + n);
         return false;
     }
     return true;
