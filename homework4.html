@@ -19,12 +19,246 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 4</h2>
+					<br>
+					<a href="#Section1">
+						<b>Theory/Research</b>
+					</a>
+					<br>
+					Illustrate the concept of statistical independence, showing also the analogies with the formal definitions in probability theory.
+				
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+                    Refine your stochastic SDE simulator to generate a continuous time, process to represent the scaling limit of the random Walk. To create the approximation of time continuity subdivide your reference temporal window into vanishing intervals dt and on each infinitesimal interval assign a probability p or p to make a jump of a + or - sqrt(dt). Note the significance of the simulation (Donsker invariance principle/ theorem or the functional central limit theorem) in relation to the Wiener process.
+
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+						<h5>Concept of Statistical Independence</h1>
+                        
+                        <p>Statistical independence is a fundamental concept in probability theory and statistics that describes a situation where the occurrence of one event does not influence the occurrence of another. This concept is essential for various applications in statistical modeling, data analysis, and hypothesis testing.</p>
+
+                        <h5>Formal Definition</h6>
+                        <p>Two events, A and B, are said to be independent if the probability of their intersection is equal to the product of their probabilities. Mathematically, this is expressed as:</p>
+                        <div class="definition">
+                            <p><strong>P(A ∩ B) = P(A) × P(B)</strong></p>
+                        </div>
+                        <p>In this equation:</p>
+                        <ul>
+                            <li><strong>P(A ∩ B)</strong> is the probability that both events A and B occur.</li>
+                            <li><strong>P(A)</strong> is the probability that event A occurs.</li>
+                            <li><strong>P(B)</strong> is the probability that event B occurs.</li>
+                        </ul>
+
+                        <h5>Analogies with Formal Definitions</h5>
+                        <p>Statistical independence can be extended to more than two events. For three events, A, B, and C, the independence condition can be generalized as:</p>
+                        <div class="definition">
+                            <p><strong>P(A ∩ B ∩ C) = P(A) × P(B) × P(C)</strong></p>
+                        </div>
+                        <p>This generalization holds true for any number of events. Independence is also related to conditional probability, where two events A and B are independent if:</p>
+                        <div class="definition">
+                            <p><strong>P(A | B) = P(A)</strong> and <strong>P(B | A) = P(B)</strong></p>
+                        </div>
+                        <p>Where <strong>P(A | B)</strong> is the probability of A given that B has occurred.</p>
+
+                        <h5>Illustrative Example</h5>
+                        <p>Consider the following example:</p>
+                        <div class="example">
+                            <p>Let A be the event of rolling a 4 on a six-sided die, and B be the event of flipping a coin and getting heads. The events A and B are independent because the outcome of the die roll does not affect the outcome of the coin flip.</p>
+                        </div>
+                        <p>In this case, we can calculate:</p>
+                        <ul>
+                            <li>P(A) = 1/6</li>
+                            <li>P(B) = 1/2</li>
+                            <li>P(A ∩ B) = P(A) × P(B) = (1/6) × (1/2) = 1/12</li>
+                        </ul>
+
+                        <h5>Conclusion</h5>
+                        <p>Understanding statistical independence is crucial in probability theory, as it underpins many statistical methods and models. By recognizing when events are independent, we can make more informed decisions in statistical analysis.</p>
+					<br><br>
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						<br>
+						
+					</div>
+					<div class="main column">
+						<form action="">
+							<strong>time</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="100" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="50" class="inp_txt">
+							<strong>p</strong>
+							<input type="number" id="inp-txt_p" size="5" value="0.5" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="attackChart"></canvas>
+							<dd id="average"></dd>
+						</div>
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_4/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework3.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework5.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+

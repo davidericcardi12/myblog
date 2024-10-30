@@ -136,7 +136,7 @@
 					<div class="description column">
 						<br>
 						<h6 id="Section1">Code general structure</h6>
-						<p>The main object element is the hacker object. Basically it is responsible for the basic operations one single hacker can do try to attack the n server based on the probability p (the tryToAttack function). After the n attacks the function sets the single path, which will be on the chart, based on the success/failure of the attacks.  Moreover one hacker can tell us his score at any time exploiting the getScoreAtTime function.
+						<p>The main object element is the hacker object. Basically it is responsible for the basic operations one single hacker can do: try to attack the n server based on the probability p (the tryToAttack function). After the n attacks the function sets the path, which will be on the chart, based on the success/failure of the attacks. The path offset (jump) can be variable and also a decimal number (look the hacker(s) object below). Moreover one hacker can tell us his score at any time exploiting the getScoreAtTime function.
 						</p>
 <pre><code>
 	function getHacker(){
@@ -145,7 +145,8 @@
 		hacker.success = [];
 		hacker.path = [0];
 	
-		hacker.tryToAttack = function (p, n){
+		hacker.tryToAttack = function (p, n, offset_path){
+			const total_time = Math.ceil(n/offset_path);
 			for(let i=0; i&lt;n; i++){
 				// Generate a random number between 0 and 1
 				const randomValue = Math.random();
@@ -159,14 +160,14 @@
 			let setPath = function(hacker, decrement){ 
 				for(let i=0,j=1; i&lt;hacker.success.length; i++,j++){
 					if(decrement==1 && hacker.success[i] == 0)
-						hacker.path.push(hacker.path[j-1] - 1);
+						hacker.path.push(hacker.path[j-1] - offset_path);
 					else if(hacker.success[i] == 1)
-						hacker.path.push(hacker.path[j-1] + 1);
+						hacker.path.push(hacker.path[j-1] + offset_path);
 					else // decrement==0 && success==0
 						hacker.path.push(hacker.path[j-1]); //linea piatta
 				}
 			}
-			setPath(this, 0);
+			setPath(this, 1);
 		}
 	
 		hacker.getScoreAtTime = function(time){
@@ -178,7 +179,7 @@
 </code></pre>
 
 				<br>
-				<p><b>However, the main code never communicates directly with a single hacker</b> but it will be the hacker(s) object to do it. Indeed the main code communicates with this object that menages all the functionality that concern the set of hackers. So, this object contains the list of hackers, the attack function (doAttack) that performs all the attacks for all the hackers and then sets the whole path that will be on the chart. If you want, the hacker(s) object can also, at any time, return mean, variance absolute and relative distribution.
+				<p>However, the main code never communicates directly with a single hacker, but it will be the hackers object to do it. Indeed the main code communicates with this object that menages all the functionality that concern the set of hackers. So, this object contains the list of hackers, the attack function (doAttack) that performs all the attacks for all the hackers and then sets the whole path that will be on the chart. If you want, the hackers object can also, at any time, return mean, variance absolute and relative distribution.  Furthermore, as we have already mentioned, the hackers object is able to manage the different measures of jump. This happens especially in the distributions computing where we can have very small jump in an interval of time.
 				</p>
 <pre><code>
 	function getHackers(m){
@@ -186,6 +187,19 @@
 		let hackers = new Object();
 	
 		hackers.hacker_list = []
+
+		hackers.offset_path = Math.sqrt(0.1); //homework 4
+		hackers.changeOffsetPath = function(offset){
+			this.offset_path = offset;
+		}
+
+		hackers.getPathIndex = function(time){
+			return Math.round(time/this.offset_path);
+		}
+
+		hackers.getNumberOfAttacks = function(n){
+			return Math.ceil(n/this.offset_path);
+		}
 	
 		//push hackers
 		for(let i=0; i&lt;m; i++){
@@ -197,7 +211,7 @@
 		hackers.paths = []
 		hackers.doAttacks = function(p, n){
 			for(let i=0; i&lt;this.hacker_list.length; i++){
-				this.hacker_list[i].tryToAttack(p, n);
+				this.hacker_list[i].tryToAttack(p, n, this.offset_path);
 				console.log(this.hacker_list[i].success);
 			}
 	
@@ -213,21 +227,23 @@
 	
 		// media scores degli hacker al tempo time
 		hackers.getMeanAtTime = function(time){
+			let index_time = this.getPathIndex(time); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
 			let score_at_time; 
 			let mean = 0;
 			if(time==0)
 				return 0;
 			for(let i=0; i&lt;this.hacker_list.length; i++){
-				score_at_time = this.hacker_list[i].getScoreAtTime(time);
-				console.log("score at time " + time + ": " + score_at_time + " per hacker " + i);
+				score_at_time = this.hacker_list[i].getScoreAtTime(index_time);
+				//console.log("score at time " + time + ": " + score_at_time + " per hacker " + i);
 				mean = mean + score_at_time/this.hacker_list.length;
 			}
-			console.log("mean at time: " + time + ": " + mean);
+			//console.log("mean at time: " + time + ": " + mean);
 			return mean;
 		}
 		
 		// varianza scores hacker al tempo time
 		hackers.getVarianceAtTime = function(time){
+			let index_time = this.getPathIndex(time); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
 			let score_at_time; 
 			let mean = this.getMeanAtTime(time);
 			let variance = 0;
@@ -235,12 +251,12 @@
 				return 0;
 			for(let i=0; i&lt;this.hacker_list.length; i++){
 				
-				score_at_time = this.hacker_list[i].getScoreAtTime(time);
-				variance += ((score_at_time - mean)**2) / time;
+				score_at_time = this.hacker_list[i].getScoreAtTime(index_time);
+				variance += ((score_at_time - mean)**2) / index_time;
 			}
 			return variance;
 		}
-	
+
 		// Array bidimensionale per rappresentare gli attacchi di tutti gli hacker
 		hackers.getListOfAttacks = function(){
 			let attacks = [];
@@ -249,18 +265,35 @@
 			});
 			return attacks;
 		}
-	
+
+		hackers.getDistributionIndex = function(n, hacker_score){
+			const offset = this.offset_path;
+			const total_time = Math.ceil(n/offset);
+			let r = hacker_score/offset;
+			if(Math.abs(r - Math.round(r)) <= offset){
+				r = Math.round(r);
+				console.log("r: "+r);
+			}
+			return total_time-r;
+		}
+
 		// per ogni livello raggiungibile quanti hacker hanno raggiunto quel livello
 		hackers.getAbsoluteDistributionAtTime = function(n, time){
-			let distribution = Array(2*n+1).fill(0); // livello i corrisponde a [n - i]
+			const offset = this.offset_path;
+			const index_time = this.getPathIndex(time); //l'indice corrispondente al tempo 'time'. Se offset = 1 => index_time = time
+			const total_time = Math.ceil(n/offset);
+			let distribution = Array(2*total_time+1).fill(0); // livello i corrisponde a [total_time - i]
 			for(let i=0; i&lt;this.hacker_list.length; i++){
-				let hackerScoreAtTime = this.hacker_list[i].getScoreAtTime(time);
-				console.log("hacker "+ i + " score: " + hackerScoreAtTime);
-				distribution[n - hackerScoreAtTime] += 1;
+				let hackerScoreAtTime = this.hacker_list[i].getScoreAtTime(index_time);
+				console.log("Hacker "+i+" score: "+hackerScoreAtTime);
+				let distribution_index = this.getDistributionIndex(n, hackerScoreAtTime)
+				distribution[distribution_index] += 1;
 			}
+			console.log(index_time);
+			console.log(distribution);
 			return distribution;
 		}
-	
+
 		hackers.getRelativeDistributionAtTime = function(n, time){
 			let absolute_distribution = this.getAbsoluteDistributionAtTime(n, time) // livello -i corrisponde a [i]; livello +i corrisponde a [n+i]
 			let relative_distribution = []
@@ -269,9 +302,7 @@
 			}
 			return relative_distribution;
 		}
-	
 		return hackers;
-	}
 </code></pre>
 				<br>
 				<p>So, we never have the getHacker call function in our main code but just the getHackers(m). It makes more easy manage the complexity of code and also any future changes on the hacker general structure.</p>
