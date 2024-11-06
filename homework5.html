@@ -19,12 +19,441 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+
+		.selector-container {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 20px;
+        }
+        .radio-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .radio-btn input[type="radio"] {
+            display: none;
+        }
+        .radio-btn span {
+            margin-left: 10px;
+        }
+        .radio-btn input[type="radio"]:checked + span {
+            color: #007bff;
+        }
+        .radio-btn .circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .radio-btn input[type="radio"]:checked + .circle {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+
+		.proof {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #F4F6F6;
+            border-left: 4px solid #2980B9;
+        }
+        .math {
+            font-family: "Courier New", Courier, monospace;
+            color: #8E44AF;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 5</h2>
+					<br>
+					<a href="#Section1">
+						<b>Theory/Research</b>
+					</a>
+					<br>
+					Illustrate the concept of statistical independence, showing also the analogies with the formal definitions in probability theory.
+				
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+                    Refine your stochastic SDE simulator to generate a continuous time, process to represent the scaling limit of the random Walk. To create the approximation of time continuity subdivide your reference temporal window into vanishing intervals dt and on each infinitesimal interval assign a probability p or p to make a jump of a + or - sqrt(dt). Note the significance of the simulation (Donsker invariance principle/ theorem or the functional central limit theorem) in relation to the Wiener process.
+
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+						<h5>Cauchy-Schwarz Inequality</h5>
+
+						<p>The Cauchy-Schwarz inequality states that, for any pair of vectors <strong>u</strong> and <strong>v</strong> in an inner product space, the following inequality holds:</p>
+
+						<div class="math">
+							|u ⋅ v| ≤ ||u|| * ||v||
+						</div>
+
+						<br>
+						<h5>Proof:</h5>
+
+						<p>Consider the vectors <strong>u</strong> and <strong>v</strong> in the inner product space. We define the following quadratic function in a real parameter <strong>t</strong>:</p>
+
+						<div class="math">
+							f(t) = ||u - t*v||²
+						</div>
+
+						<p>Expand the expression for <strong>f(t)</strong>:</p>
+
+						<div class="math">
+							f(t) = (u - t*v) ⋅ (u - t*v)
+						</div>
+						<div class="math">
+							f(t) = u ⋅ u - 2t(u ⋅ v) + t²(v ⋅ v)
+						</div>
+						<p>Since the square of a norm is always non-negative, we have:</p>
+
+						<div class="math">
+							f(t) ≥ 0
+						</div>
+
+						<p>Now rewrite the quadratic function:</p>
+
+						<div class="math">
+							f(t) = ||u||² - 2t(u ⋅ v) + t²||v||²
+						</div>
+
+						<p>Since <strong>f(t) ≥ 0</strong> for all <strong>t</strong>, the discriminant of this quadratic must be non-positive. The discriminant of <strong>f(t)</strong> is:</p>
+
+						<div class="math">
+							D = (-2(u ⋅ v))² - 4 * ||v||² * ||u||²
+						</div>
+
+						<p>We require the discriminant to be non-positive:</p>
+
+						<div class="math">
+							D = 4(u ⋅ v)² - 4 * ||u||² * ||v||² ≤ 0
+						</div>
+
+						<p>Divide both sides by 4:</p>
+
+						<div class="math">
+							(u ⋅ v)² ≤ ||u||² * ||v||²
+						</div>
+
+						<p>Finally, take the square root of both sides (noting that both sides are non-negative):</p>
+
+						<div class="math">
+							|u ⋅ v| ≤ ||u|| * ||v||
+						</div>
+
+						<h5>Conclusion:</h5>
+						<br>
+						<p>We have thus proven the Cauchy-Schwarz inequality:</p>
+						<div class="math">
+							|u ⋅ v| ≤ ||u|| * ||v||
+						</div>
+						<br><br>
+
+						<h3>Independence vs. Uncorrelation</h3>
+						<br>
+						<div class="section">
+							<h5>Independence</h5>
+							<p>Two random variables, <strong>X</strong> and <strong>Y</strong>, are said to be <strong>independent</strong> if the occurrence of one does not affect the probability distribution of the other. In formal terms, for any events <strong>A</strong> and <strong>B</strong>:</p>
+
+							<div class="math">
+								P(A ∩ B) = P(A) * P(B)
+							</div>
+
+							<p>Independence implies that the joint distribution of <strong>X</strong> and <strong>Y</strong> factors into the product of their marginal distributions:</p>
+
+							<div class="math">
+								P(X, Y) = P(X) * P(Y)
+							</div>
+
+							<p>In terms of expectations, if <strong>X</strong> and <strong>Y</strong> are independent, then:</p>
+
+							<div class="math">
+								E[X * Y] = E[X] * E[Y]
+							</div>
+
+							<p>Independence is a stronger condition than decorrelation, as it implies that there is no dependency between the variables at all, including higher-order relationships.</p>
+						</div>
+						<br>
+						<div class="section">
+							<h5>Uncorrelation</h5>
+							<p>Two random variables, <strong>X</strong> and <strong>Y</strong>, are said to be <strong>uncorrelated</strong> if their covariance is zero:</p>
+
+							<div class="math">
+								Cov(X, Y) = E[(X - E[X]) * (Y - E[Y])] = 0
+							</div>
+
+							<p>Uncorrelation implies that there is no linear relationship between the variables. However, it does not rule out other forms of dependency, such as nonlinear relationships. This means that two variables can be uncorrelated but still dependent in a more complex way, for example, through a non-linear function.</p>
+							
+							<p>Uncorrelation is a weaker condition than independence, as it only indicates the absence of linear dependence, but does not preclude other types of dependence.</p>
+						</div>
+						<br>
+						<div class="section">
+							<h5>Conceptual Differences</h5>
+							<p>The key differences between independence and uncorrelation lie in their definitions and implications:</p>
+							<ul>
+								<li><strong>Independence:</strong> Implies that the occurrence of one event does not influence the occurrence of another. It covers all forms of dependency, both linear and nonlinear.</li>
+								<li><strong>Uncorrelation:</strong> Implies that there is no linear relationship between the two variables. However, uncorrelated variables can still have a nonlinear dependency.</li>
+							</ul>
+							<p>In summary, uncorrelated variables are not necessarily independent, but independent variables are always uncorrelated. Independence is a stronger condition than uncorrelation because it covers all types of relationships, while uncorrelation only addresses linear relationships.</p>
+						</div>
+						<br>
+						<div class="section">
+							<h5>Possible Measures</h5>
+							<p>There are several ways to measure the independence or lack thereof between random variables:</p>
+							<ul>
+								<li><strong>Correlation Coefficient:</strong> This is a measure of linear dependence between two variables. If the correlation coefficient is zero, the variables are uncorrelated. However, this does not imply independence.</li>
+								<li><strong>Covariance:</strong> A measure of the joint variability of two variables. A covariance of zero indicates that the variables are uncorrelated.</li>
+								<li><strong>Mutual Information:</strong> A more general measure of dependence, mutual information captures both linear and nonlinear dependencies. Zero mutual information implies independence.</li>
+							</ul>
+							<p>While correlation and covariance are useful for detecting linear relationships, mutual information is a more comprehensive measure for identifying any form of dependency between variables.</p>
+						</div>
+						<br>
+						<h5>Conclusion</h5>
+						<p>In conclusion, independence is a stronger concept than uncorrelation, as it implies no relationship at all between two variables, while uncorrelation only rules out linear relationships. Understanding these concepts and the measures used to quantify them is essential for analyzing statistical relationships between variables.</p>
+						<br><br>
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						<br>
+						
+					</div>
+					<div class="main column">
+						<div class="selector-container">
+							<label id="maruyama_simulator" class="radio-btn" data-value="1">
+								<input type="radio" name="selector">
+								<div class="circle"></div>
+								<span>Simple Euler–Maruyama simulator</span>
+							</label>
+							<label id="maruyama_sde" class="radio-btn" data-value="2">
+								<input type="radio" name="selector">
+								<div class="circle"></div>
+								<span>Refined Euler–Maruyama for SDE</span>
+							</label>
+							<label id="sde_continuos_process" class="radio-btn" data-value="3">
+								<input type="radio" name="selector">
+								<div class="circle"></div>
+								<span>SDE Continuous Process</span>
+							</label>
+							<label id="sde_with_time_continuity" class="radio-btn" data-value="4">
+								<input type="radio" name="selector" checked>
+								<div class="circle"></div>
+								<span>SDE with Time Continuity</span>
+							</label>
+						</div>
+
+						<form id="h1" action="" style="display: none;">
+							<strong>n</strong>
+							<input type="text" id="inp-txt_n" size="5"  value="5">
+							<strong>m</strong>
+							<input type="text" id="inp-txt_m" size="5" value="3">
+							<strong>p</strong>
+							<input type="text" id="inp-txt_p" size="5" value="0.6">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						<form id="h2" action="" style="display: none;">
+							<strong>server</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="5" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="10" class="inp_txt">
+							<strong>p</strong>
+							<input type="number" id="inp-txt_p" size="5" value="0.6" class="inp_txt">
+							<strong>time step</strong>
+							<input type="number" id="inp-txt_timestep" size="5" value="3" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						<form id="h3" action="" style="display: none;">
+							<strong>time</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="100" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="50" class="inp_txt">
+							<strong>lambda(attack rate)</strong>
+							<input type="number" id="inp-txt_lambda" size="5" value="50" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						<form id="h4" action="">
+							<strong>time</strong>
+							<input type="number" id="inp-txt_n" size="5"  value="100" class="inp_txt">
+							<strong>hacker</strong>
+							<input type="number" id="inp-txt_m" size="5" value="50" class="inp_txt">
+							<strong>p</strong>
+							<input type="number" id="inp-txt_p" size="5" value="0.5" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Make chart</button>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="attackChart"></canvas>
+							<dd id="average"></dd>
+						</div>
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_5/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework4.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework6.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+
