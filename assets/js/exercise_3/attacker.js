@@ -188,7 +188,7 @@ window.onload = function (){
                     { x: endX+0.3, y: yPosition }
                 ],
                 borderColor: 'rgb(255, 0, 0)', // Colore della linea orizzontale
-                borderWidth: 10,
+                borderWidth: 3,
                 fill: false, // Non riempire l'area sotto la linea
                 tension: 0, // Rimuovi le curve
                 pointRadius: 0, // Nascondi i punti all'estremità della linea

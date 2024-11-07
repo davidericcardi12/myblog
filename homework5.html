@@ -367,11 +367,11 @@
 
 						<form id="h1" action="" style="display: none;">
 							<strong>n</strong>
-							<input type="text" id="inp-txt_n" size="5"  value="5">
+							<input type="number" id="inp-txt_n" size="5"  value="5" class="inp_txt">
 							<strong>m</strong>
-							<input type="text" id="inp-txt_m" size="5" value="3">
+							<input type="number" id="inp-txt_m" size="5" value="3" class="inp_txt">
 							<strong>p</strong>
-							<input type="text" id="inp-txt_p" size="5" value="0.6">
+							<input type="number" id="inp-txt_p" size="5" value="0.6" class="inp_txt">
 							<button name="data" type="button" class="btn-make">Make chart</button>
 						</form>
 						<form id="h2" action="" style="display: none;">
@@ -407,8 +407,11 @@
 						
 						<div id="chartContainer">
 							<canvas id="attackChart"></canvas>
+							<canvas id="histogramChart1" style="display: none;"></canvas>
+							<canvas id="histogramChart2" style="display: none;"></canvas>
 							<dd id="average"></dd>
 						</div>
+						
 						<!-- CODE OF EXERCISE -->
 						<script src="assets/js/exercise_5/attacker.js"></script>
 

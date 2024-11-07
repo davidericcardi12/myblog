@@ -109,10 +109,10 @@ window.onload = function (){
                                 const legendLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
                                 
                                 // Ritorna una singola etichetta per la "Distribuzione Relativa"
-                                console.log("kllll " +hackers.getMeanAtTime(n));
+                                console.log("kllll " +hackers.getMeanAtTime(n, n));
                                 return [
                                     {
-                                        text: 'Relative Distribution at time ' + n + "; Mean: " + roundToTwoDecimalPlaces(hackers.getMeanAtTime(n)) + "; Variance: " + roundToTwoDecimalPlaces(hackers.getVarianceAtTime(n)),
+                                        text: 'Relative Distribution at time ' + n + "; Mean: " + roundToTwoDecimalPlaces(hackers.getMeanAtTime(n,n)) + "; Variance: " + roundToTwoDecimalPlaces(hackers.getVarianceAtTime(n,n)),
                                         fillStyle: 'rgba(255, 0, 0)',  // Colore della legenda
                                         strokeStyle: 'rgba(255, 0, 0)',
                                         lineWidth: 3,
@@ -182,7 +182,7 @@ window.onload = function (){
 
         relative_distribution_at_time.forEach((length, index) => {
             let i_y = n - index * hackers.offset_path;
-            const yPosition = i_y; // Y per l'indice corrente
+            const yPosition = i_y+hackers.offset_path; // Y per l'indice corrente
             const startX = hackers.offset_path*hackers.getNumberOfAttacks(n);
             console.log("start x: ", startX);
             const endX = startX + (length)*half_chart_remain*5; // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
@@ -297,12 +297,19 @@ function getHackers(m){
         this.offset_path = offset;
     }
 
-    hackers.getPathIndex = function(time){
+    hackers.getPathIndex = function(time,n){
+        if(time == n)
+            return this.getNumberOfAttacks(n);
+
         return Math.round(time/this.offset_path);
     }
 
     hackers.getNumberOfAttacks = function(n){
-        return Math.ceil(n/this.offset_path);
+        let num_attacks = Math.ceil(n/this.offset_path);
+        if(num_attacks % 1 != 0)
+            num_attacks += 1;
+    
+        return num_attacks;
     }
 
     //push hackers
@@ -329,8 +336,8 @@ function getHackers(m){
     }
 
     // media scores degli hacker al tempo time
-    hackers.getMeanAtTime = function(time){
-        let index_time = this.getPathIndex(time); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
+    hackers.getMeanAtTime = function(time, n){
+        let index_time = this.getPathIndex(time, n); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
         let score_at_time; 
         let mean = 0;
         if(time==0)
@@ -345,10 +352,10 @@ function getHackers(m){
     }
     
     // varianza scores hacker al tempo time
-    hackers.getVarianceAtTime = function(time){
-        let index_time = this.getPathIndex(time); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
+    hackers.getVarianceAtTime = function(time,n){
+        let index_time = this.getPathIndex(time,n); //l'indice corrisponde al tempo 'time'. Se offset = 1 => index_time = time
         let score_at_time; 
-        let mean = this.getMeanAtTime(time);
+        let mean = this.getMeanAtTime(time,n);
         let variance = 0;
         if(time==0)
             return 0;
@@ -383,7 +390,7 @@ function getHackers(m){
     // per ogni livello raggiungibile quanti hacker hanno raggiunto quel livello
     hackers.getAbsoluteDistributionAtTime = function(n, time){
         const offset = this.offset_path;
-        const index_time = this.getPathIndex(time); //l'indice corrispondente al tempo 'time'. Se offset = 1 => index_time = time
+        const index_time = this.getPathIndex(time,n); //l'indice corrispondente al tempo 'time'. Se offset = 1 => index_time = time
         const total_time = Math.ceil(n/offset);
         let distribution = Array(2*total_time+1).fill(0); // livello i corrisponde a [total_time - i]
         for(let i=0; i<this.hacker_list.length; i++){
