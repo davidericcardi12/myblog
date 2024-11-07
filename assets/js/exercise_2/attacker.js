@@ -216,7 +216,7 @@ window.onload = function (){
             let i_y = n-index;
             const yPosition = i_y; // Y per l'indice corrente
             const startX = parseInt(n);
-            const endX = parseInt(n) + (length)*half_chart_remain; // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
+            const endX = parseInt(n) + (length)*half_chart_remain*4; // Estensione della linea orizzontale fino a un massimo del 50% della rimanente x in avanti
 
             // Aggiungi la linea orizzontale
             attackChart.data.datasets.push({

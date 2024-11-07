@@ -184,8 +184,8 @@ window.onload = function (){
             attackChart.data.datasets.push({
                 label: `Relative distribution`,
                 data: [
-                    { x: startX+0.3, y: yPosition  },
-                    { x: endX+0.3, y: yPosition }
+                    { x: startX, y: yPosition  },
+                    { x: endX, y: yPosition }
                 ],
                 borderColor: 'rgb(255, 0, 0)', // Colore della linea orizzontale
                 borderWidth: 3,
