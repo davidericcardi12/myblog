@@ -19,12 +19,336 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chance@1.1.7/chance.min.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+
+		.selector-container {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 20px;
+        }
+        .radio-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .radio-btn input[type="radio"] {
+            display: none;
+        }
+        .radio-btn span {
+            margin-left: 10px;
+        }
+        .radio-btn input[type="radio"]:checked + span {
+            color: #007bff;
+        }
+        .radio-btn .circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .radio-btn input[type="radio"]:checked + .circle {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+
+		.proof {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #F4F6F6;
+            border-left: 4px solid #2980B9;
+        }
+
+		#input-container {
+			width: 100%;  /* Imposta una larghezza per il contenitore */
+		}
+		
+		#input-list {
+			display: grid;  /* Usa Grid per il layout */
+			grid-template-columns: repeat(5, 1fr);  /* Imposta 5 colonne per ogni riga */
+			gap: 10px;  /* Distanza tra gli elementi */
+			padding: 0;
+			margin: 0;
+			list-style-type: none;  /* Rimuovi il punto elenco */
+		}
+		
+		.input-list-el {
+			display: flex;  /* Ogni elemento della lista sarà un contenitore flessibile */
+			justify-content: center;  /* Centra l'input all'interno del contenitore */
+		}
+		
+		.input-list-el input {
+			width: 100%;  /* Rendi l'input largo quanto la cella disponibile */
+			box-sizing: border-box;  /* Assicurati che il padding venga incluso nel calcolo della larghezza */
+		}
+
+		code {
+            background-color: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 6</h2>
+					<br>
+					<a href="#Section1">
+						<b>Research</b>
+					</a>
+					<br>
+					Research: Recall the fundamental theorem of calculus and demonstrate its relationship with density 
+					functions and cumulative distribution functions (CDFs).				
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+					Generate realizations from a discrete univariate probability distribution with arbitrary probabilities.
+					Graphically show the convergence of the empirical distribution to the theoretical distribution as the sample size increases.
+					Compute also, during the generation, the mean and variance using recursive methods (e.g., Knuth's/Welford's algorithms) 
+					and compare these results with the theoretical mean and variance, discussing the relationship.
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+						<h5>The Fundamental Theorem of Calculus (FTC)</h5>
+						<p>The Fundamental Theorem of Calculus consists of two main parts:</p>
+						<ol>
+							<li><b>Part 1:</b> If a function <code>f</code> is continuous on the interval <code>[a, b]</code>, then the function <code>F(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt</code> is continuous on <code>[a, b]</code>, differentiable on <code>(a, b)</code>, and its derivative is <code>f(x)</code>, i.e., <code>F'(x) = f(x)</code>.</li>
+							<li><b>Part 2:</b> If <code>F</code> is any antiderivative of <code>f</code>, i.e., <code>F'(x) = f(x)</code>, then the definite integral of <code>f</code> from <code>a</code> to <code>b</code> can be computed as <code>∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) - F(a)</code>.</li>
+						</ol>
+						
+						<h5>Relationship with Probability Density Function (PDF)</h5>
+						<p>A <b>Probability Density Function (PDF)</b>, denoted as <code>f_X(x)</code>, is a function that describes the likelihood of a random variable taking a particular value. The PDF must satisfy two conditions:
+							<ul>
+								<li><code>f_X(x) ≥ 0</code> for all values of <code>x</code> (non-negative values).</li>
+								<li>The total area under the curve of the PDF is 1, i.e., <code>∫<sub>-∞</sub><sup>∞</sup> f_X(x) dx = 1</code>.</li>
+							</ul>
+						</p>
+
+						<p>The Fundamental Theorem of Calculus plays a significant role when working with the Cumulative Distribution Function (CDF). The relationship is established as follows:</p>
+						<p>If we define the CDF of a random variable <code>X</code> as:</p>
+						<code>F_X(x) = P(X ≤ x) = ∫<sub>-∞</sub><sup>x</sup> f_X(t) dt</code>
+						<p>Then the CDF <code>F_X(x)</code> represents the cumulative probability that <code>X</code> is less than or equal to <code>x</code>.</p>
+						<p>According to Part 1 of the FTC, the derivative of the CDF with respect to <code>x</code> gives the PDF:</p>
+						<code>F_X'(x) = f_X(x)</code>
+						<p>This means that the PDF is the derivative of the CDF, which is a direct application of the Fundamental Theorem of Calculus.</p>
+
+						<h5>Demonstration</h5>
+						<p>Let's demonstrate the relationship between the PDF and CDF more formally. Consider a continuous random variable <code>X</code> with a PDF <code>f_X(x)</code> and a CDF <code>F_X(x)</code>.</p>
+						
+						<p>The CDF is defined as:</p>
+						<code>F_X(x) = ∫<sub>-∞</sub><sup>x</sup> f_X(t) dt</code>
+						
+						<p>By applying the Fundamental Theorem of Calculus (FTC) Part 1, we can differentiate the CDF:</p>
+						<code>F_X'(x) = f_X(x)</code>
+						<p>This derivative represents the rate of change of the cumulative probability, which corresponds to the probability density at that specific point <code>x</code>.</p>
+
+						<h5>Application in Probability Theory</h5>
+						<p>This relationship is crucial in probability theory because it allows us to switch between the PDF and CDF by differentiation or integration, making it easier to compute probabilities and expectations for continuous random variables.</p>
+						<p>For example, the probability that the random variable <code>X</code> lies within a specific interval <code[a, b]</code> is given by:</p>
+						<code>P(a ≤ X ≤ b) = F_X(b) - F_X(a)</code>
+						<p>Here, the CDF values at <code>b</code> and <code>a</code> give the cumulative probabilities, and their difference yields the probability of <code>X</code> being between <code>a</code> and <code>b</code>.</p>
+
+						<h5>Summary</h5>
+						<p>To summarize, the Fundamental Theorem of Calculus provides a fundamental link between the Probability Density Function (PDF) and the Cumulative Distribution Function (CDF). The PDF is the derivative of the CDF, and the CDF is the integral of the PDF. This relationship is essential in understanding how cumulative probabilities accumulate from individual probability densities, and vice versa.</p>
+						<br><br>
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						<br>
+						
+					</div>
+					<div class="main column">
+						<form id="form" action="">
+							<strong>Number of fields</strong>
+							<input type="number" id="inp-txt_fields" size="5"  value="5" class="inp_txt">
+							<button name="data" type="button" class="btn-make" id="btn-fields">Generate random distribution</button>
+							<div id="input-container">
+								<ul id="input-list">
+
+								</ul>
+							</div>
+							<div style="margin-top: 10px; display:none;" id="jkk">
+								<strong>Number of samples</strong>
+								<input type="number" id="inp-txt_samples" size="5"  value="1000" class="inp_txt">
+							</div>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="chartPaths"></canvas>
+							<canvas id="chartBar"></canvas>
+							<canvas id="histogramChart2" style="display: none;"></canvas>
+							<dd id="average"></dd>
+						</div>
+						
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_6/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework5.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework7.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+
