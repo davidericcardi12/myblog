@@ -19,12 +19,280 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chance@1.1.7/chance.min.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+
+		.selector-container {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 20px;
+        }
+        .radio-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .radio-btn input[type="radio"] {
+            display: none;
+        }
+        .radio-btn span {
+            margin-left: 10px;
+        }
+        .radio-btn input[type="radio"]:checked + span {
+            color: #007bff;
+        }
+        .radio-btn .circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .radio-btn input[type="radio"]:checked + .circle {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+
+		.proof {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #F4F6F6;
+            border-left: 4px solid #2980B9;
+        }
+
+		#input-container {
+			width: 100%;  /* Imposta una larghezza per il contenitore */
+		}
+		
+		#input-list {
+			display: grid;  /* Usa Grid per il layout */
+			grid-template-columns: repeat(5, 1fr);  /* Imposta 5 colonne per ogni riga */
+			gap: 10px;  /* Distanza tra gli elementi */
+			padding: 0;
+			margin: 0;
+			list-style-type: none;  /* Rimuovi il punto elenco */
+		}
+		
+		.input-list-el {
+			display: flex;  /* Ogni elemento della lista sarà un contenitore flessibile */
+			justify-content: center;  /* Centra l'input all'interno del contenitore */
+		}
+		
+		.input-list-el input {
+			width: 100%;  /* Rendi l'input largo quanto la cella disponibile */
+			box-sizing: border-box;  /* Assicurati che il padding venga incluso nel calcolo della larghezza */
+		}
+
+		code {
+            background-color: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 7</h2>
+					<br>
+
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						Using the setup of <a href="homework6.html">previous homework</a>, from a discrete distribution generate m (e.g. m=1000 ...) samples 
+of size n (e.g., n = 20, 30, 100, ...). Compute the distribution of the sampling average. 
+Determine the average of the distribution of the averages of the samples, and the variance, 
+discussing the observed relationship with the mean and variance of the parent (theoretical) distribution.
+					</div>
+					<div class="main column">
+						<form id="form" action="">
+							<strong>Number of fields</strong>
+							<input type="number" id="inp-txt_fields" size="5"  value="5" class="inp_txt">
+							<button name="data" type="button" class="btn-make" id="btn-fields">Generate random distribution</button>
+							<div id="input-container">
+								<ul id="input-list">
+
+								</ul>
+							</div>
+							<div style="margin-top: 10px; display:none;" id="jkk">
+								<strong>Number of samples</strong>
+								<input type="number" id="inp-txt_samples" size="5"  value="1000" class="inp_txt">
+								<strong>Size of sample</strong>
+								<input type="number" id="inp-txt_sampleSize" size="5"  value="50" class="inp_txt">
+							</div>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="chartBar"></canvas>
+							<canvas id="histogramChart2" style="display: none;"></canvas>
+							<dd id="average"></dd>
+						</div>
+						<div id="mv" style="display: none;">
+							<dd id="eMean"></dd>
+							<dd id="tMean"></dd>
+							<dd id="eVariance"></dd>
+							<dd id="tVariance"></dd>
+						</div>
+						
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_7/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework6.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework8.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+
