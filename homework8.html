@@ -19,12 +19,452 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chance@1.1.7/chance.min.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+
+		.selector-container {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 20px;
+        }
+        .radio-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .radio-btn input[type="radio"] {
+            display: none;
+        }
+        .radio-btn span {
+            margin-left: 10px;
+        }
+        .radio-btn input[type="radio"]:checked + span {
+            color: #007bff;
+        }
+        .radio-btn .circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .radio-btn input[type="radio"]:checked + .circle {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+
+		.proof {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #F4F6F6;
+            border-left: 4px solid #2980B9;
+        }
+
+		#input-container {
+			width: 100%;  /* Imposta una larghezza per il contenitore */
+		}
+		
+		#input-list {
+			display: grid;  /* Usa Grid per il layout */
+			grid-template-columns: repeat(5, 1fr);  /* Imposta 5 colonne per ogni riga */
+			gap: 10px;  /* Distanza tra gli elementi */
+			padding: 0;
+			margin: 0;
+			list-style-type: none;  /* Rimuovi il punto elenco */
+		}
+		
+		.input-list-el {
+			display: flex;  /* Ogni elemento della lista sarà un contenitore flessibile */
+			justify-content: center;  /* Centra l'input all'interno del contenitore */
+		}
+		
+		.input-list-el input {
+			width: 100%;  /* Rendi l'input largo quanto la cella disponibile */
+			box-sizing: border-box;  /* Assicurati che il padding venga incluso nel calcolo della larghezza */
+		}
+
+		code {
+            background-color: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+			height: 400px;
+        }
+
+		.scrollable-container {
+			display: inline-block; /* Adatta il contenitore al testo */
+			margin: 20px; /* Spaziatura intorno al contenitore */
+		}
+	
+		.scrollable-text {
+			width: 100%; /* Larghezza fissa */
+			height: 150px; /* Altezza fissa */
+			padding: 10px; /* Spaziatura interna */
+			border: 1px solid #ccc; /* Bordo */
+			border-radius: 5px; /* Angoli arrotondati */
+			background-color: #f9f9f9; /* Sfondo */
+			overflow-y: auto; /* Abilita lo scroll verticale */
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombra */
+		}
+
+		#text1{
+			border: 2px solid rgba(75, 192, 192);
+		}
+
+		#text2{
+			border: 2px solid rgba(153, 102, 255, 0.7);
+			margin-top: 20px;
+		}
+	
+		.scrollable-text::-webkit-scrollbar {
+			width: 8px; /* Larghezza scrollbar */
+		}
+	
+		.scrollable-text::-webkit-scrollbar-thumb {
+			background-color: #aaa; /* Colore scrollbar */
+			border-radius: 4px; /* Angoli scrollbar */
+		}
+	
+		.scrollable-text::-webkit-scrollbar-thumb:hover {
+			background-color: #888; /* Colore scrollbar al passaggio mouse */
+		}
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+				<header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 8</h2>
+					<br>
+					<a href="#Section1">
+						<b>Theory/Research</b>
+					</a>
+					<br>
+					Recall the notion of Shannon Entropy and other diversity measures of distributions. <br>
+					Recall the notion of primitive root (a primitive root modulo p a prime number is a number g such that for every
+integer a that is coprime to p , there exists an integer k such that g^k \mod p = a )	
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+					Part 1
+Find and compile a sufficiently large piece of text by selecting several web pages and create a letter frequency distribution.
+Choose a random shift value (e.g., 1-25, with wrap-around) and apply the Caesar cipher to encrypt the original text:
+E = L + shift for each letter L of the message.
+Use frequency analysis or find any efficient and effective strategy to find the shift and decrypt the message.
+			    </header>
+			    <header class="blog-post-header">
+					<br>
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+
+						<h5>Shannon Entropy</h5>
+						<p>
+							Shannon entropy is a measure of uncertainty or randomness in a distribution. It quantifies how unpredictable or diverse a dataset is. 
+						</p>
+						<p>
+							<code>H = - Σ (p<sub>i</sub> * log<sub>2</sub>(p<sub>i</sub>))</code>
+						</p>
+						<ul>
+							<li><strong>H:</strong> Entropy of the distribution.</li>
+							<li><strong>p<sub>i</sub>:</strong> Probability of the <em>i-th</em> outcome.</li>
+						</ul>
+						<p>
+							For example, in a system where all outcomes are equally likely, the entropy is highest. If one outcome dominates, entropy is lower.
+						</p>
+
+						<h5>Other Diversity Measures</h5>
+						<p>
+							Shannon entropy is one way to measure diversity, but there are other approaches:
+						</p>
+						<ul>
+							<li><strong>Simpson's Index:</strong> Measures the probability that two randomly selected items belong to the same group:
+								<br><code>D = Σ (p<sub>i</sub><sup>2</sup>)</code>
+							</li>
+							<li><strong>Gini-Simpson Index:</strong> Focuses on the probability that two items belong to different groups:
+								<br><code>1 - D = 1 - Σ (p<sub>i</sub><sup>2</sup>)</code>
+							</li>
+							<li><strong>Rényi Entropy:</strong> A generalization of Shannon entropy with a sensitivity parameter <code>α</code>:
+								<br><code>H<sub>α</sub> = 1 / (1 - α) * log<sub>2</sub>(Σ p<sub>i</sub><sup>α</sup>)</code>
+							</li>
+						</ul>
+
+					
+
+	
+
+						<br>
+						<h5>Primitive Roots</h5>
+
+						<p>
+							A <strong>primitive root</strong> modulo a prime number <code>p</code> is an integer <code>g</code> such that every integer <code>a</code> coprime to <code>p</code> 
+							can be expressed as a power of <code>g</code> modulo <code>p</code>. In other words, for any <code>a</code> where <code>gcd(a, p) = 1</code>, there exists an integer <code>k</code> such that:
+						</p>
+						<p>
+							<code>g<sup>k</sup> ≡ a (mod p)</code>
+						</p>
+
+						<h5>Key Properties</h5>
+						<ul>
+							<li><strong>Modulo a prime:</strong> Primitive roots only exist modulo a prime number <code>p</code> or certain composite numbers.</li>
+							<li><strong>Order:</strong> The smallest integer <code>k</code> such that <code>g<sup>k</sup> ≡ 1 (mod p)</code> is called the <em>order</em> of <code>g</code>.</li>
+							<li><strong>Complete residue system:</strong> The powers of a primitive root modulo <code>p</code> generate all integers coprime to <code>p</code>.</li>
+						</ul>
+
+						<h5>Example</h5>
+						<p>
+							Let <code>p = 7</code> and <code>g = 3</code>. To check if <code>3</code> is a primitive root modulo <code>7</code>, compute the powers of <code>3</code> modulo <code>7</code>:
+						</p>
+						<ul>
+							<li><code>3<sup>1</sup> ≡ 3 (mod 7)</code></li>
+							<li><code>3<sup>2</sup> ≡ 2 (mod 7)</code></li>
+							<li><code>3<sup>3</sup> ≡ 6 (mod 7)</code></li>
+							<li><code>3<sup>4</sup> ≡ 4 (mod 7)</code></li>
+							<li><code>3<sup>5</sup> ≡ 5 (mod 7)</code></li>
+							<li><code>3<sup>6</sup> ≡ 1 (mod 7)</code></li>
+						</ul>
+						<p>
+							The powers of <code>3</code> modulo <code>7</code> cover all integers coprime to <code>7</code> (1, 2, 3, 4, 5, 6). Thus, <code>3</code> is a primitive root modulo <code>7</code>.
+						</p>
+
+						
+						<br><br>
+					<div class="description column">
+					<div id="kk" class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						
+					</div>
+					<div class="main column">
+						<form action="">
+							<strong># of characters</strong>
+							<input type="number" id="inp-txt_char" size="5"  value="1000" class="inp_txt">
+							<strong>SHIFT</strong>
+							<input type="number" id="inp-txt_shift" size="5" value="7" class="inp_txt">
+							<button name="data" type="button" class="btn-make">Generate</button>
+						</form>
+						
+						<div class="scrollable-container">
+							<div class="scrollable-text" id="text1">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+						
+								Proin eget tortor risus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Pellentesque in ipsum id orci porta dapibus. Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada.
+							</div>
+							<div class="scrollable-text" id="text2">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+						
+								Proin eget tortor risus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Pellentesque in ipsum id orci porta dapibus. Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada.
+							</div>
+						</div>
+						
+						<div id="chartContainer">
+							<canvas id="chartBar1"></canvas>
+							<canvas id="chartBar2"></canvas>
+							<dd id="average"></dd>
+						</div>
+
+						<br>
+						<h5>How to break the encryption?</h5>
+<pre><code>
+// Decrypt message just using the frequency
+let decryptMessage = function(frequencyOriginal, frequencyCypher){
+	
+	const alphabet = [
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
+		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
+		'u', 'v', 'w', 'x', 'y', 'z'
+	];
+	let length = alphabet.length;
+	let shift;
+
+	let potentialShift = 0;
+	let winner = 0;
+	for(let i=0; i&lt;length && winner == 0; i++){
+		let matching = 1;
+		for(let k=0; k<&lt;length && matching == 1; k++){
+			let currentCharOriginal = alphabet[k];
+			//console.log("current char original: " + currentCharOriginal);
+			let currentCharCypher = alphabet[ ( ((k+potentialShift)%26) + 26) % 26];
+			//console.log("current char cyber: " + currentCharCypher);
+			if(frequencyOriginal[currentCharOriginal] != frequencyCypher[currentCharCypher]){
+				matching = 0;
+			}
+		}
+		if(matching == 1){
+			winner = 1;
+			shift = potentialShift;
+		}
+		potentialShift++;
+	}
+	return shift;    
+}
+</code></pre>
+						<dd id="description-code">It’s easy find out which is the shift used in the encryption phase. Using this simple code we can do it in a very little computational time: for each character L in in the sorted alphabet it compares his frequency of the original text with L+SHIFT(potential shift) frequency of the cypher text, starting with SHIFT(potential shift) at 0. For a given potential SHIFT, if for all comparison it turns out that there is a match, then we have broken the encryption security. <br> <b></b>
+						</dd>
+
+
+						
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_8/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework6.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework8.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+
