@@ -95,11 +95,12 @@ window.onload = function (){
         if(chartBar)
             chartBar.destroy();
 
-        const sampleMean = g.sampleMean.map(val => parseFloat(val.toFixed(2)));; // Distribuzione delle medie arrotondate a due cifre decimali
-        console.log(sampleMean);
+        //const sampleMean = g.sampleMean.map(val => parseFloat(val.toFixed(2)));; // Distribuzione delle medie arrotondate a due cifre decimali
+        const sampleVariance = g.sampleVariance.map(val => parseFloat(val.toFixed(2)));;
+        console.log(sampleVariance);
 
         let frequency = {}
-        sampleMean.forEach(mean => {
+        sampleVariance.forEach(mean => {
             frequency[mean] = (frequency[mean] || 0) + 1;
         });
         console.log(frequency);
@@ -143,7 +144,7 @@ window.onload = function (){
                 plugins: {
                     title: {
                         display: true, // Abilita il titolo
-                        text: 'Sampling Means Distribution', // Testo del titolo
+                        text: 'Sampling Variance Distribution', // Testo del titolo
                         font: {
                             size: 18 // Dimensione del font
                         },

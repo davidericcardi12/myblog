@@ -19,12 +19,336 @@
     
     <!-- Theme CSS -->  
     <link id="theme-style" rel="stylesheet" href="assets/css/theme-2.css">
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Aggiungi un po' di stile per il canvas */
+        /* Stile per il contenitore dei grafici */
+		.chart-container {
+			display: flex;
+			flex-direction: column; /* Posiziona i grafici in colonna */
+			align-items: center; /* Centra i grafici orizzontalmente */
+			width: 80%; /* Imposta la larghezza del grafico */
+    		max-height: 400px; /* Imposta l'altezza del grafico */
+			margin: 20px; /* Margine attorno ai grafici */
+			
+		}
+
+		.btn-make{
+			margin: 20px;
+		}
+
+		.inp_txt{
+			width: 70px;
+			margin-right: 5px;
+		}
+
+		/* Stile per il canvas dei grafici */
+		#attackChart{
+			 /* Limita la larghezza massima dei grafici */
+			width: 100%; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+
+		#distributionChart{
+			/* Limita la larghezza massima dei grafici */
+			width: 100% !important; /* Imposta la larghezza al 100% del contenitore */
+			height: auto !important; /* Altezza fissa per i grafici */
+			/* Margine verticale tra i grafici */
+		}
+		b {
+			font-weight: bold;
+			color: black;
+		}
+
+		.equation {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+		
+    </style>
 
 </head> 
 
 <body>
-    work in progress...
+    
+    <header class="header text-center">	    
+	    <!--<h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">Davide's Blog</a></h1> -->
+        
+	    <nav class="navbar navbar-expand-lg navbar-dark" >
+           
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navigation" class="collapse navbar-collapse flex-column" >
+				<div class="profile-section pt-3 pt-lg-0">
+				    <img class="profile-image mb-3 rounded-circle mx-auto" src="assets/images/profile.png" alt="image" >			
+					
+					<div class="bio mb-3">Davide Riccardi <br> </div>
+					<ul class="social-list list-inline py-3 mx-auto">
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
+			            <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
+			        </ul><!--//social-list-->
+			        <hr> 
+				</div><!--//profile-section-->
+				
+				<ul class="navbar-nav flex-column text-left">
+					<li class="nav-item">
+					    <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Blog Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+					    <a class="nav-link" href="blog-post.html"><i class="fas fa-bookmark fa-fw mr-2"></i>Blog Post</a>
+					</li>
+					<li class="nav-item">
+					    <a class="nav-link" href="code-structure.html"><i class="fas fa-user fa-fw mr-2"></i>Code explanation</a>
+					</li>
+					<!--
+					<li class="nav-item">
+					    <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>About Me</a>
+					</li>
+				\\\-->
+				</ul>
+			
+			</div>
+		</nav>
+    </header>
+    
+    <div class="main-wrapper" max-height="800px">
+	    
+	    <article class="blog-post px-3 py-5 p-md-5">
+		    <div class="container">
+			    <header class="blog-post-header">
+				    <h2 class="title mb-2">Homework 10</h2>
+					<br>
+					<a href="#Section1">
+						<b>Theory/Research</b>
+					</a>
+					<br>
+					General concept of sampling mean and variance and main features of their distributions. <br>
+					General idea Lebesgue–Stieltjes integration and applications to Probability theory and to Measure theory				
+
+					<br><br>
+					<a href="#Section2">
+						<b>Application practice</b>
+					</a>
+					<br>
+					Try compute numerically a Lebesgue integral and compare the same with the Riemann integral (you might compute mean or variance of a distribution).
+
+			    </header>
+			    
+			    <div class="blog-post-body">
+					<div class="description column">
+						<br>
+						<br>
+						<h4 id="Section1">Theory/Research</h4>
+						<br>
+						<h4>Sampling Mean and Variance</h4>
+
+						<br>
+    <p>
+        In statistics, when we take samples from a population, we often compute the mean and variance of the sample.
+        These are key measures that help us understand the behavior of the sample and make inferences about the
+        population.
+    </p>
+
+    <strong>Sampling Mean</strong>
+    <p>
+        The <strong>sample mean</strong> is the average of the values in the sample. For a random sample 
+        \( X_1, X_2, \ldots, X_n \) of size \( n \), the sample mean is calculated as:
+    </p>
+    <p class="formula">
+        \[
+        \bar{X} = \frac{1}{n} \sum_{i=1}^n X_i
+        \]
+    </p>
+    <p>
+        The sample mean is an <strong>unbiased estimator</strong> of the population mean \( \mu \). This means:
+    </p>
+    <p class="formula">
+        \[
+        \mathbb{E}[\bar{X}] = \mu
+        \]
+    </p>
+    <p>
+        The variance of the sample mean \( \bar{X} \) is related to the population variance \( \sigma^2 \), and it decreases as the sample size increases:
+    </p>
+    <p class="formula">
+        \[
+        \text{Var}(\bar{X}) = \frac{\sigma^2}{n}
+        \]
+    </p>
+    <p>
+        This formula shows that larger samples result in more precise estimates of the mean.
+    </p>
+
+    <strong>Sampling Variance</strong>
+    <p>
+        The <strong>sample variance</strong> is a measure of how spread out the values in the sample are. It is computed as:
+    </p>
+    <p class="formula">
+        \[
+        S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2
+        \]
+    </p>
+    <p>
+        Here, \( n-1 \) is used instead of \( n \) to correct for bias in estimating the population variance. This is called
+        <strong>Bessel's correction</strong>. The sample variance is an <strong>unbiased estimator</strong> of the population variance \( \sigma^2 \), meaning:
+    </p>
+    <p class="formula">
+        \[
+        \mathbb{E}[S^2] = \sigma^2
+        \]
+    </p>
+
+    <strong>Distributions</strong>
+    <p>
+        The <strong>sampling distribution</strong> of the sample mean \( \bar{X} \) has the following properties:
+    </p>
+    <ul>
+        <li>If the population is normally distributed, then \( \bar{X} \) is also normally distributed:</li>
+        <p class="formula">
+            \[
+            \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right)
+            \]
+        </p>
+        <li>If the population is not normally distributed, the <strong>Central Limit Theorem (CLT)</strong> states that for large \( n \), the distribution of \( \bar{X} \) approximates a normal distribution.</li>
+    </ul>
+    <p>
+        The <strong>sampling distribution</strong> of the sample variance \( S^2 \) is related to the chi-squared distribution:
+    </p>
+    <p class="formula">
+        \[
+        \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+        \]
+    </p>
+    <p>
+        This means that the sample variance is not normally distributed but instead follows a chi-squared distribution with \( n-1 \) degrees of freedom.
+    </p>
+
+    <strong>Main Features</strong>
+    <ul>
+        <li>The sample mean \( \bar{X} \) is more accurate as the sample size increases, due to the reduction in variance.</li>
+        <li>The sample variance \( S^2 \) provides an unbiased estimate of the population variance.</li>
+        <li>Both statistics depend on the sample size and the variability of the population.</li>
+    </ul>
+	<br>
+	<h4>Lebesgue–Stieltjes Integration and Its Applications</h4>
+
+    <p>The Lebesgue–Stieltjes integral is a generalization of the regular Lebesgue integral. It allows integration with respect to a function, which can be any real-valued function, not just a simple measure. This makes it very useful in various fields such as Probability Theory and Measure Theory.</p>
+    
+    <strong>Definition</strong>
+    <p>The general form of the Lebesgue–Stieltjes integral is:</p>
+    <pre>
+        ∫_a^b f(x) dg(x)
+    </pre>
+    <p>Here, <i>f(x)</i> is a function to integrate and <i>g(x)</i> is a function that defines the measure with respect to which we are integrating. The function <i>g(x)</i> is typically of bounded variation, which means its increase is controlled over the interval <i>[a, b]</i>.</p>
+
+    <strong>Mathematical Representation</strong>
+    <p>If <i>g(x)</i> is a continuous, non-decreasing function, the integral can be written as:</p>
+    <pre>
+        ∫_a^b f(x) dg(x) = lim (Δx → 0) Σ f(x_i) (g(x_i+1) - g(x_i))
+    </pre>
+    <p>In this formula, <i>f(x_i)</i> is the value of the function at some sample points, and <i>Δx</i> is the partitioning of the interval into small subintervals. The sum represents the Riemann-Stieltjes sum, which approximates the integral.</p>
+
+    <strong>Applications to Probability Theory</strong>
+    <p>In Probability Theory, the Lebesgue–Stieltjes integral plays an important role in defining expected values and other statistical measures. For example, if <i>F(x)</i> is a cumulative distribution function (CDF) of a random variable, the Lebesgue–Stieltjes integral can be used to compute expected values:</p>
+    <pre>
+        E[X] = ∫_a^b x dF(x)
+    </pre>
+    <p>Here, <i>E[X]</i> is the expected value of the random variable <i>X</i>, and <i>F(x)</i> is the CDF of <i>X</i>.</p>
+
+    <strong>Applications to Measure Theory</strong>
+    <p>In Measure Theory, the Lebesgue–Stieltjes integral is a tool for integrating with respect to measures that are not necessarily simple. For example, if <i>g(x)</i> represents a probability measure, we can compute the integral of a function over the measure space:</p>
+    <pre>
+        ∫_X f(x) dμ(x)
+    </pre>
+    <p>Where <i>μ(x)</i> is a measure, and <i>f(x)</i> is a measurable function. The Lebesgue–Stieltjes integral generalizes the concept of integrating over a space, providing more flexibility in handling complex spaces.</p>
+
+
+					<br><br>
+					<div class="description column">
+						<h4 id="Section2">2. Application practice</h4>
+						<br>
+						
+					</div>
+					<div class="main column">
+						<form action="">
+							<strong>f(x) = </strong>
+							<select id="functionSelect" style="margin-right: 10px;">
+								<option value="x2">x^2</option>
+								<option value="sin">sin(x)</option>
+								<option value="cos">cos(x)</option>
+								<option value="exp">e^x</option>
+								<option value="log">log(x)</option>
+							</select>
+							<strong>IntervalStart</strong>
+							<input type="number" id="inp-txt_start" size="5" value="-50" class="inp_txt">
+							<strong>IntervalEnd</strong>
+							<input type="number" id="inp-txt_end" size="5" value="50" class="inp_txt">
+							<button name="data" type="button" class="btn-compute">Compute</button>
+						</form>
+						
+						
+						<div id="chartContainer">
+							<canvas id="functionChart"></canvas>
+							<dd id="average"></dd>
+						</div>
+						<dd id="riemannIntegral"></dd>
+						<dd id="lebesgueIntegral"></dd>
+						<dd id="exactIntegral"></dd>
+						<!-- CODE OF EXERCISE -->
+						<script src="assets/js/exercise_10/attacker.js"></script>
+
+						
+					</div>
+
+					<br>
+					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
+				    
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework9.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				</nav>
+				
+				
+				
+		    </div><!--//container-->
+	    </article>
+	    
+	    <footer class="footer text-center py-2 theme-bg-dark">
+		   
+	        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Do not take life too seriously. You will never get out of it alive - Elbert Hubbard</small>
+		   
+	    </footer>
+    
+    </div><!--//main-wrapper-->
+    
+
+    
+       
+    <!-- Javascript -->          
+    <script src="assets/plugins/jquery-3.3.1.min.js"></script>
+    <script src="assets/plugins/popper.min.js"></script> 
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+    
+    <!-- Page Specific JS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/blog.js"></script>
+
+       
+    
 
 </body>
 </html> 
+

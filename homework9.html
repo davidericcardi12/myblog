@@ -148,46 +148,7 @@
             background-color: #f4f4f4;
             padding: 0.2em 0.4em;
             border-radius: 4px;
-			height: 400px;
         }
-
-		.scrollable-container {
-			display: inline-block; /* Adatta il contenitore al testo */
-			margin: 20px; /* Spaziatura intorno al contenitore */
-		}
-	
-		.scrollable-text {
-			width: 100%; /* Larghezza fissa */
-			height: 150px; /* Altezza fissa */
-			padding: 10px; /* Spaziatura interna */
-			border: 1px solid #ccc; /* Bordo */
-			border-radius: 5px; /* Angoli arrotondati */
-			background-color: #f9f9f9; /* Sfondo */
-			overflow-y: auto; /* Abilita lo scroll verticale */
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombra */
-		}
-
-		#text1{
-			border: 2px solid rgba(75, 192, 192);
-		}
-
-		#text2{
-			border: 2px solid rgba(153, 102, 255, 0.7);
-			margin-top: 20px;
-		}
-	
-		.scrollable-text::-webkit-scrollbar {
-			width: 8px; /* Larghezza scrollbar */
-		}
-	
-		.scrollable-text::-webkit-scrollbar-thumb {
-			background-color: #aaa; /* Colore scrollbar */
-			border-radius: 4px; /* Angoli scrollbar */
-		}
-	
-		.scrollable-text::-webkit-scrollbar-thumb:hover {
-			background-color: #888; /* Colore scrollbar al passaggio mouse */
-		}
 
 		
     </style>
@@ -254,17 +215,17 @@
 					<br>
 					Mention the main properties of the sampling mean and variance.
 Illustrate the law of large numbers and some possible applications, especially related to cybersecurity concepts.
-
 					<br><br>
 					<a href="#Section2">
 						<b>Application practice</b>
 					</a>
 					<br>
-					Following the same scheme of HMWK 7 compute the distribution of the sampling variance ("corrected" or not).
+					Following the same scheme of <a href="homework6.html">HMWK 7</a> compute the distribution of the sampling variance ("corrected" or not).
 Determine the distribution of the variances of the samples, and its mean and variance.
 discussing the observed relationship with the mean and variance of the parent (theoretical) distribution.
 			    </header>
 			    <header class="blog-post-header">
+					<br>
 					<br>
 					<div class="description column">
 						<br>
@@ -272,153 +233,104 @@ discussing the observed relationship with the mean and variance of the parent (t
 						<h4 id="Section1">Theory/Research</h4>
 						<br>
 
-						<h5>Shannon Entropy</h5>
-						<p>
-							Shannon entropy is a measure of uncertainty or randomness in a distribution. It quantifies how unpredictable or diverse a dataset is. 
-						</p>
-						<p>
-							<code>H = - Σ (p<sub>i</sub> * log<sub>2</sub>(p<sub>i</sub>))</code>
-						</p>
-						<ul>
-							<li><strong>H:</strong> Entropy of the distribution.</li>
-							<li><strong>p<sub>i</sub>:</strong> Probability of the <em>i-th</em> outcome.</li>
-						</ul>
-						<p>
-							For example, in a system where all outcomes are equally likely, the entropy is highest. If one outcome dominates, entropy is lower.
-						</p>
+						<h4>Sampling and the Law of Large Numbers</h4>
 
-						<h5>Other Diversity Measures</h5>
-						<p>
-							Shannon entropy is one way to measure diversity, but there are other approaches:
-						</p>
-						<ul>
-							<li><strong>Simpson's Index:</strong> Measures the probability that two randomly selected items belong to the same group:
-								<br><code>D = Σ (p<sub>i</sub><sup>2</sup>)</code>
-							</li>
-							<li><strong>Gini-Simpson Index:</strong> Focuses on the probability that two items belong to different groups:
-								<br><code>1 - D = 1 - Σ (p<sub>i</sub><sup>2</sup>)</code>
-							</li>
-							<li><strong>Rényi Entropy:</strong> A generalization of Shannon entropy with a sensitivity parameter <code>α</code>:
-								<br><code>H<sub>α</sub> = 1 / (1 - α) * log<sub>2</sub>(Σ p<sub>i</sub><sup>α</sup>)</code>
-							</li>
-						</ul>
-
+						<section>
+							<strong>The Importance of Sampling</strong>
+							<p>Sampling is the process of choosing a smaller group of observations from a larger population. This method is very important when analyzing the entire population is not possible because of limits like time or cost. For example, instead of checking every system in a network, experts can analyze a sample of devices to find possible threats.</p>
+							<p>A good sample should reflect the main characteristics of the population. For example, in cybersecurity, if the network includes devices with different security settings, the sample must consider these differences. This way, the results from the sample are more likely to match the overall population.
+							</p>
+						</section>
 					
-
-	
-
-						<br>
-						<h5>Primitive Roots</h5>
-
-						<p>
-							A <strong>primitive root</strong> modulo a prime number <code>p</code> is an integer <code>g</code> such that every integer <code>a</code> coprime to <code>p</code> 
-							can be expressed as a power of <code>g</code> modulo <code>p</code>. In other words, for any <code>a</code> where <code>gcd(a, p) = 1</code>, there exists an integer <code>k</code> such that:
-						</p>
-						<p>
-							<code>g<sup>k</sup> ≡ a (mod p)</code>
-						</p>
-
-						<h5>Key Properties</h5>
-						<ul>
-							<li><strong>Modulo a prime:</strong> Primitive roots only exist modulo a prime number <code>p</code> or certain composite numbers.</li>
-							<li><strong>Order:</strong> The smallest integer <code>k</code> such that <code>g<sup>k</sup> ≡ 1 (mod p)</code> is called the <em>order</em> of <code>g</code>.</li>
-							<li><strong>Complete residue system:</strong> The powers of a primitive root modulo <code>p</code> generate all integers coprime to <code>p</code>.</li>
-						</ul>
-
-						<h5>Example</h5>
-						<p>
-							Let <code>p = 7</code> and <code>g = 3</code>. To check if <code>3</code> is a primitive root modulo <code>7</code>, compute the powers of <code>3</code> modulo <code>7</code>:
-						</p>
-						<ul>
-							<li><code>3<sup>1</sup> ≡ 3 (mod 7)</code></li>
-							<li><code>3<sup>2</sup> ≡ 2 (mod 7)</code></li>
-							<li><code>3<sup>3</sup> ≡ 6 (mod 7)</code></li>
-							<li><code>3<sup>4</sup> ≡ 4 (mod 7)</code></li>
-							<li><code>3<sup>5</sup> ≡ 5 (mod 7)</code></li>
-							<li><code>3<sup>6</sup> ≡ 1 (mod 7)</code></li>
-						</ul>
-						<p>
-							The powers of <code>3</code> modulo <code>7</code> cover all integers coprime to <code>7</code> (1, 2, 3, 4, 5, 6). Thus, <code>3</code> is a primitive root modulo <code>7</code>.
-						</p>
+						<section>
+							<strong>Mean and Variance in Sampling</strong>
+							<p>When working with a sample, two critical measures are the sampling mean and variance. These statistics provide essential insights into the central tendency and dispersion of the data.</p>
+							<ul>
+								<li><strong>Sampling Mean (\(\bar{x}\)):</strong> This is the average of the data points in the sample and is calculated as:
+									<div class="formula">
+										\[
+										\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i
+										\]
+									</div>
+									Where:
+									<ul>
+										<li>\(n\) is the number of observations in the sample</li>
+										<li>\(x_i\) represents the individual data points</li>
+									</ul>
+									On average, the sampling mean is an unbiased estimate of the population mean (\(\mu\)).
+								</li>
+								<li><strong>Variance in Sampling:</strong> Variance shows how much the data points are spread out. The variance of the sample mean becomes smaller as the sample size gets bigger, which can be written mathematically as:
+									<div class="formula">
+										\[
+										\text{Var}(\bar{x}) = \frac{\sigma^2}{n}
+										\]
+									</div>
+									Here, \(\sigma^2\) is the population variance, and \(n\) is the sample size. Larger samples lead to reduced variability in the sampling mean, making it a more precise estimator of the population mean.
+								</li>
+							</ul>
+						</section>
+					
+						<section>
+							<strong>The Law of Large Numbers (LLN)</strong>
+							<p>The LLN is a fundamental principle that states: as the sample size increases, the sample mean (\(\bar{x}\)) converges to the true population mean (\(\mu\)). This convergence ensures that randomness diminishes with larger datasets, revealing consistent and reliable patterns.</p>
+							The law of large numbers provides a statistical guarantee that larger datasets yield insights closer to the truth.
+						</section>
+					
+						<section>
+							<br>
+							<strong>Applications in Cybersecurity</strong>
+							<p>The principles of sampling and the LLN are highly relevant in cybersecurity, where rapid decision-making often relies on analyzing vast datasets. Some notable applications include:</p>
+							<ul>
+								<li><strong>Network Monitoring:</strong> By sampling traffic data, analysts can identify anomalies or suspicious activity indicative of potential threats.</li>
+								<li><strong>Vulnerability Assessment:</strong> Conducting penetration tests on a representative sample of systems provides insights into the broader network's security posture.</li>
+								<li><strong>Incident Response:</strong> During cyberattacks, sampled logs can help teams efficiently determine the breach's origin and scope, enabling faster containment and recovery.</li>
+							</ul>
+							<p>For instance, when analyzing traffic patterns, a larger sample can improve the accuracy of anomaly detection algorithms, reducing false positives and enhancing system resilience.</p>
+						</section>
+					
+						<section>
+							
+							<p>
+								Finally we can say that sampling and the law of large numbers are fundamental aspects of statistical analysis, linking theoretical knowledge to real-world uses. In fields like cybersecurity, finance, or public health, these principles form the basis for extracting reliable insights from data. Using these ideas helps analysts tackle complex problems, such as protecting digital systems or improving decision-making strategies.</p>
+						</section>
 
 						
 						<br><br>
 					<div class="description column">
-					<div id="kk" class="description column">
 						<h4 id="Section2">2. Application practice</h4>
 						
-					</div>
 					<div class="main column">
-						<form action="">
-							<strong># of characters</strong>
-							<input type="number" id="inp-txt_char" size="5"  value="1000" class="inp_txt">
-							<strong>SHIFT</strong>
-							<input type="number" id="inp-txt_shift" size="5" value="7" class="inp_txt">
-							<button name="data" type="button" class="btn-make">Generate</button>
+						<form id="form" action="">
+							<strong>Number of fields</strong>
+							<input type="number" id="inp-txt_fields" size="5"  value="5" class="inp_txt">
+							<button name="data" type="button" class="btn-make" id="btn-fields">Generate random distribution</button>
+							<div id="input-container">
+								<ul id="input-list">
+
+								</ul>
+							</div>
+							<div style="margin-top: 10px; display:none;" id="jkk">
+								<strong>Number of samples</strong>
+								<input type="number" id="inp-txt_samples" size="5"  value="1000" class="inp_txt">
+								<strong>Size of sample</strong>
+								<input type="number" id="inp-txt_sampleSize" size="5"  value="50" class="inp_txt">
+							</div>
 						</form>
 						
-						<div class="scrollable-container">
-							<div class="scrollable-text" id="text1">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-						
-								Proin eget tortor risus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Pellentesque in ipsum id orci porta dapibus. Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada.
-							</div>
-							<div class="scrollable-text" id="text2">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-						
-								Proin eget tortor risus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Pellentesque in ipsum id orci porta dapibus. Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada.
-							</div>
-						</div>
-						
 						<div id="chartContainer">
-							<canvas id="chartBar1"></canvas>
-							<canvas id="chartBar2"></canvas>
+							<canvas id="chartBar"></canvas>
+							<canvas id="histogramChart2" style="display: none;"></canvas>
 							<dd id="average"></dd>
 						</div>
-
-						<br>
-						<h5>How to break the encryption?</h5>
-<pre><code>
-// Decrypt message just using the frequency
-let decryptMessage = function(frequencyOriginal, frequencyCypher){
-	
-	const alphabet = [
-		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
-		'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
-		'u', 'v', 'w', 'x', 'y', 'z'
-	];
-	let length = alphabet.length;
-	let shift;
-
-	let potentialShift = 0;
-	let winner = 0;
-	for(let i=0; i&lt;length && winner == 0; i++){
-		let matching = 1;
-		for(let k=0; k<&lt;length && matching == 1; k++){
-			let currentCharOriginal = alphabet[k];
-			//console.log("current char original: " + currentCharOriginal);
-			let currentCharCypher = alphabet[ ( ((k+potentialShift)%26) + 26) % 26];
-			//console.log("current char cyber: " + currentCharCypher);
-			if(frequencyOriginal[currentCharOriginal] != frequencyCypher[currentCharCypher]){
-				matching = 0;
-			}
-		}
-		if(matching == 1){
-			winner = 1;
-			shift = potentialShift;
-		}
-		potentialShift++;
-	}
-	return shift;    
-}
-</code></pre>
-						<dd id="description-code">It’s easy find out which is the shift used in the encryption phase. Using this simple code we can do it in a very little computational time: for each character L in in the sorted alphabet it compares his frequency of the original text with L+SHIFT(potential shift) frequency of the cypher text, starting with SHIFT(potential shift) at 0. For a given potential SHIFT, if for all comparison it turns out that there is a match, then we have broken the encryption security. <br> <b></b>
-						</dd>
-
-
+						<div id="mv" style="display: none;">
+							<dd id="eMean"></dd>
+							<dd id="tMean"></dd>
+							<dd id="eVariance"></dd>
+							<dd id="tVariance"></dd>
+						</div>
 						
 						<!-- CODE OF EXERCISE -->
-						<script src="assets/js/exercise_8/attacker.js"></script>
+						<script src="assets/js/exercise_9/attacker.js"></script>
 
 						
 					</div>
@@ -427,8 +339,8 @@ let decryptMessage = function(frequencyOriginal, frequencyCypher){
 					<p>Click <a href="code-structure.html">here</a> for the code explanation</p>
 				    
 			    <nav class="blog-nav nav nav-justified my-5">
-				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework7.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework9.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="homework8.html">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="homework10.html">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
 				</nav>
 				
 				
